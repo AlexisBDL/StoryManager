@@ -97,8 +97,8 @@ func appplyPatch(sp spec.Spec, rootVal types.Value, basePath types.Path, patch d
 func runCreateStory(cmd *cobra.Command, args []string) error {
 	sp, err := spec.ForDatabase("Stories")
 	d.PanicIfError(err)
-	var composition = []string{"title", args[0], "description", " ", "effort", "0"}
-	applyStructEdits(sp, types.NewStruct("Stories", nil), nil, composition)
+	var composition = []string{"description", " ", "effort", "0"}
+	applyStructEdits(sp, types.NewStruct(args[0], nil), nil, composition)
 	fmt.Printf("%s created\n", args[0])
 
 	return nil
