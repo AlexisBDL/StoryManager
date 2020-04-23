@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/diff"
 	"github.com/attic-labs/noms/go/spec"
 	"github.com/attic-labs/noms/go/types"
+
 	"github.com/spf13/cobra"
 )
 
@@ -56,8 +58,7 @@ func argumentToValue(arg string, db datas.Database) (types.Value, error) {
 	return types.String(arg), nil
 }
 
-func applyStructEdits(sp spec.Spec, rootVal types.Value, basePath types.Path, args []string) {
-	db := sp.GetDatabase()
+func applyStructEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) {
 	patch := diff.Patch{}
 	for i := 0; i < len(args); i += 2 {
 		if !types.IsValidStructFieldName(args[i]) {
@@ -73,16 +74,10 @@ func applyStructEdits(sp spec.Spec, rootVal types.Value, basePath types.Path, ar
 			NewValue:   nv,
 		})
 	}
-	appplyPatch(sp, rootVal, basePath, patch)
+	appplyPatch(db, rootVal, basePath, patch)
 }
 
-func appplyPatch(sp spec.Spec, rootVal types.Value, basePath types.Path, patch diff.Patch) {
-	db := sp.GetDatabase()
-	baseVal := basePath.Resolve(rootVal, db)
-	if baseVal == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("No value at: %s", sp.String()))
-	}
-
+func appplyPatch(db datas.Database, rootVal types.Value, basePath types.Path, patch diff.Patch) {
 	newRootVal := diff.Apply(rootVal, patch)
 	d.Chk.NotNil(newRootVal)
 	r := db.WriteValue(newRootVal)
@@ -95,11 +90,14 @@ func appplyPatch(sp spec.Spec, rootVal types.Value, basePath types.Path, patch d
 }
 
 func runCreateStory(cmd *cobra.Command, args []string) error {
-	sp, err := spec.ForDatabase("Stories")
+	cfg := config.NewResolver() //config default db "Stories"
+	db, err := cfg.GetDatabase("")
 	d.PanicIfError(err)
+	defer db.Close()
+
 	var composition = []string{"description", " ", "effort", "0"}
-	applyStructEdits(sp, types.NewStruct(args[0], nil), nil, composition)
-	fmt.Printf("%s created\n", args[0])
+	applyStructEdits(db, types.NewStruct(args[0], nil), nil, composition) // crée la story nommée arg[0] dans db par défaut avec composition
+	fmt.Printf("%s created, don't forget to set it and commit\n", args[0])
 
 	return nil
 }
@@ -108,8 +106,7 @@ var createStoryCmd = &cobra.Command{
 	Use:   "create <title>",
 	Short: "Create a new story.",
 	Args:  cobra.MinimumNArgs(1),
-	//PreRunE: loadRepoEnsureUser,
-	RunE: runCreateStory,
+	RunE:  runCreateStory,
 }
 
 func init() {

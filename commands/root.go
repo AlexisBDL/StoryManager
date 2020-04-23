@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const rootCommandName = "storyManager"
+const rootCommandName = "StoryManager"
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
