@@ -15,11 +15,14 @@ import (
 
 func runCommitStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver()
-	db, ds, err := cfg.GetDataset("")
+	path := args[0]    //path ou hash
+	dataSet := args[1] //story
+	message := args[3]
+	db, ds, err := cfg.GetDataset("Stories::" + dataSet)
 	d.CheckError(err)
 	defer db.Close()
 
-	absPath, err := spec.NewAbsolutePath(args[0]) //args[0] est hash
+	absPath, err := spec.NewAbsolutePath(path)
 	d.CheckError(err)
 
 	value := absPath.Resolve(db)
@@ -36,7 +39,6 @@ func runCommitStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	message := "message commit"
 	meta, err := spec.CreateCommitMetaStruct(db, "", message, nil, nil)
 	d.CheckErrorNoUsage(err)
 
@@ -53,14 +55,12 @@ func runCommitStory(cmd *cobra.Command, args []string) error {
 }
 
 var commitStoryCmd = &cobra.Command{
-	Use:   "commit <'#hash'>",
+	Use:   "commit <#path> <story> <message>",
 	Short: "Commit a story.",
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(3),
 	RunE:  runCommitStory,
 }
 
 func init() {
 	RootCmd.AddCommand(commitStoryCmd)
-
-	commitStoryCmd.Flags().SortFlags = false
 }
