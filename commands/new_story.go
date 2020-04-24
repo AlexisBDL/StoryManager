@@ -58,7 +58,7 @@ func argumentToValue(arg string, db datas.Database) (types.Value, error) {
 	return types.String(arg), nil
 }
 
-func applyStructEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) {
+func applyStructEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) *spec.AbsolutePath {
 	patch := diff.Patch{}
 	for i := 0; i < len(args); i += 2 {
 		if !types.IsValidStructFieldName(args[i]) {
@@ -74,10 +74,10 @@ func applyStructEdits(db datas.Database, rootVal types.Value, basePath types.Pat
 			NewValue:   nv,
 		})
 	}
-	appplyPatch(db, rootVal, basePath, patch)
+	return appplyPatch(db, rootVal, basePath, patch)
 }
 
-func appplyPatch(db datas.Database, rootVal types.Value, basePath types.Path, patch diff.Patch) {
+func appplyPatch(db datas.Database, rootVal types.Value, basePath types.Path, patch diff.Patch) *spec.AbsolutePath {
 	newRootVal := diff.Apply(rootVal, patch)
 	d.Chk.NotNil(newRootVal)
 	r := db.WriteValue(newRootVal)
@@ -86,18 +86,28 @@ func appplyPatch(db datas.Database, rootVal types.Value, basePath types.Path, pa
 		Hash: r.TargetHash(),
 		Path: basePath,
 	}
-	fmt.Println(newAbsPath.String())
+	return &newAbsPath
 }
 
 func runCreateStory(cmd *cobra.Command, args []string) error {
+	title := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	db, err := cfg.GetDatabase("")
+	db, ds, err := cfg.GetDataset("::" + title)
 	d.PanicIfError(err)
 	defer db.Close()
 
 	var composition = []string{"description", " ", "effort", "0"}
-	applyStructEdits(db, types.NewStruct(args[0], nil), nil, composition) // crée la story nommée arg[0] dans db par défaut avec composition
-	fmt.Printf("%s created, don't forget to set it and commit\n", args[0])
+	absPath := applyStructEdits(db, types.NewStruct(title, nil), nil, composition)
+
+	value := absPath.Resolve(db)
+
+	meta, err := spec.CreateCommitMetaStruct(db, "", "create new story", nil, nil)
+	d.CheckErrorNoUsage(err)
+
+	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
+	d.CheckErrorNoUsage(err)
+
+	fmt.Printf("%s created\n", title)
 
 	return nil
 }
@@ -105,12 +115,10 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 var createStoryCmd = &cobra.Command{
 	Use:   "create <title>",
 	Short: "Create a new story.",
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.ExactArgs(1),
 	RunE:  runCreateStory,
 }
 
 func init() {
-	RootCmd.AddCommand(createStoryCmd)
-
-	createStoryCmd.Flags().SortFlags = false
+	storyCmd.AddCommand(createStoryCmd)
 }
