@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Utile plus tard si notion de Login
+
 func runInit(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
 	db, err := cfg.GetDatabase("")
