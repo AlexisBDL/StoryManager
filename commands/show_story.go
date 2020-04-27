@@ -31,7 +31,7 @@ var showStoryCmd = &cobra.Command{
 	Use:   "show <title>",
 	Short: "show a story.",
 	Args:  cobra.ExactArgs(1),
-	RunE:  runDeleteStory,
+	RunE:  runShowStory,
 }
 
 func init() {

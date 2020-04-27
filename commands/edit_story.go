@@ -32,7 +32,7 @@ var editStoryCmd = &cobra.Command{
 	Use:   "edit <title>",
 	Short: "Edit a story.",
 	Args:  cobra.ExactArgs(1),
-	RunE:  runDeleteStory,
+	RunE:  runEditStory,
 }
 
 func init() {
