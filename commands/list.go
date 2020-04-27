@@ -30,5 +30,5 @@ var listStoryCmd = &cobra.Command{
 }
 
 func init() {
-	storyCmd.AddCommand(listStoryCmd)
+	RootCmd.AddCommand(listStoryCmd)
 }
