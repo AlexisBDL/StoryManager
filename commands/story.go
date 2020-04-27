@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//Implementer show pour afficher les stories dans l'annuaire
+//Lister ds pour afficher les stories dans l'annuaire
 
 var storyCmd = &cobra.Command{
 	Use:   "story",

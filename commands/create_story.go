@@ -101,7 +101,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	value := absPath.Resolve(db)
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "create new story", nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "create new story : "+title, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
