@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -96,18 +97,29 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	d.PanicIfError(err)
 	defer db.Close()
 
+	// Create
 	var composition = []string{"description", " ", "effort", "0"}
 	absPath := applyStructEdits(db, types.NewStruct(title, nil), nil, composition)
 
+	// Commit
 	value := absPath.Resolve(db)
+	if value == nil {
+		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", absPath.String())))
+	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "create new story : "+title, nil, nil)
+	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
+	if oldCommitExists {
+		fmt.Printf("Create aborted - %s allready exist (is #%v)\n", title, oldCommitRef)
+		return nil
+	}
+
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+title, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
-	fmt.Printf("%s created\n", title)
+	fmt.Printf("%s was created\n", title)
 
 	return nil
 }
