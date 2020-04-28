@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"util/*"
 
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
