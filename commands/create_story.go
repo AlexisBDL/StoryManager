@@ -109,7 +109,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
 	if oldCommitExists {
-		fmt.Printf("Create aborted - %s allready exist (is #%v)\n", title, oldCommitRef)
+		fmt.Printf("Create aborted - %s allready exist (is #%s)\n", title, oldCommitRef.TargetHash().String())
 		return nil
 	}
 

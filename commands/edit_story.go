@@ -3,61 +3,21 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/diff"
 	"github.com/attic-labs/noms/go/spec"
 	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
 
-func applyStructEditsSp(sp spec.Spec, rootVal types.Value, basePath types.Path, args []string) (path string) {
-	if len(args)%2 != 0 {
-		d.CheckError(fmt.Errorf("Must be an even number of key/value pairs"))
-	}
-	if rootVal == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("No value at: %s", sp.String()))
-		return
-	}
-	db := sp.GetDatabase()
-	patch := diff.Patch{}
-	for i := 0; i < len(args); i += 2 {
-		if !types.IsValidStructFieldName(args[i]) {
-			d.CheckError(fmt.Errorf("Invalid field name: %s at position: %d", args[i], i))
-		}
-		nv, err := argumentToValue(args[i+1], db)
-		if err != nil {
-			d.CheckError(fmt.Errorf("Invalid field value: %s at position %d: %s", args[i+1], i+1, err))
-		}
-		patch = append(patch, diff.Difference{
-			Path:       append(basePath, types.FieldPath{Name: args[i]}),
-			ChangeType: types.DiffChangeModified,
-			NewValue:   nv,
-		})
-	}
-	return appplyPatchSp(sp, rootVal, basePath, patch)
-}
-
-func appplyPatchSp(sp spec.Spec, rootVal types.Value, basePath types.Path, patch diff.Patch) (path string) {
-	db := sp.GetDatabase()
-	baseVal := basePath.Resolve(rootVal, db)
-	if baseVal == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("No value at: %s", sp.String()))
-	}
-
-	newRootVal := diff.Apply(rootVal, patch)
-	d.Chk.NotNil(newRootVal)
-	r := db.WriteValue(newRootVal)
-	db.Flush()
-	newAbsPath := spec.AbsolutePath{
-		Hash: r.TargetHash(),
-		Path: basePath,
-	}
-	return newAbsPath.String()
-}
+var (
+	editEffort      int
+	editDescription string
+)
 
 func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
 	db := sp.GetDatabase()
@@ -74,9 +34,10 @@ func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
 
 func runEditStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
-	key := args[1]
-	value := args[2]
-	field := []string{key, value}
+	cfg := config.NewResolver() //config default db "Stories"
+	db, ds, err := cfg.GetDataset("::" + title)
+	d.PanicIfError(err)
+	defer db.Close()
 
 	// Edit
 	str := "Stories::" + title + ".value"
@@ -84,20 +45,30 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	d.PanicIfError(err)
 
 	rootVal, basePath := splitPath(sp)
-	path := applyStructEditsSp(sp, rootVal, basePath, field)
+	var absPath *spec.AbsolutePath
+	var change string
+	switch {
+	case editDescription != "" && editEffort != -1:
+		change = "effort and description"
+		field := []string{"effort", strconv.Itoa(editEffort), "description", editDescription}
+		absPath = applyStructEdits(db, rootVal, basePath, field)
+		break
+	case editDescription != "":
+		change = "description"
+		field := []string{"description", editDescription}
+		absPath = applyStructEdits(db, rootVal, basePath, field)
+		break
+	case editEffort != -1:
+		change = "effort"
+		field := []string{"effort", strconv.Itoa(editEffort)}
+		absPath = applyStructEdits(db, rootVal, basePath, field)
+		break
+	}
 
 	// Commit
-	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetDataset("::" + title)
-	d.PanicIfError(err)
-	defer db.Close()
-
-	absPath, err := spec.NewAbsolutePath(path)
-	d.CheckError(err)
-
 	valPath := absPath.Resolve(db)
 	if valPath == nil {
-		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", path)))
+		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", absPath.String())))
 	}
 
 	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
@@ -109,7 +80,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "set value "+key+" in story : "+title, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Edit value "+change+" in story : "+title, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
@@ -126,12 +97,19 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 }
 
 var editStoryCmd = &cobra.Command{
-	Use:   "edit <title> <key> <value>",
-	Short: "Edit a story.",
-	Args:  cobra.ExactArgs(3),
+	Use:   "edit <title> [flag] <value>",
+	Short: "Edit a field of story.",
+	Args:  cobra.ExactArgs(1),
 	RunE:  runEditStory,
 }
 
 func init() {
 	storyCmd.AddCommand(editStoryCmd)
+
+	editStoryCmd.Flags().IntVarP(&editEffort, "effort", "e", -1,
+		"Provide an effort to evaluate the story",
+	)
+	editStoryCmd.Flags().StringVarP(&editDescription, "description", "d", "",
+		"Provide a message to describe the story, use \"\" to add more than one word",
+	)
 }
