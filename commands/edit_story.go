@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func applyStructEditsSp(sp spec.Spec, rootVal types.Value, basePath types.Path, args []string) {
+func applyStructEditsSp(sp spec.Spec, rootVal types.Value, basePath types.Path, args []string) (path string) {
 	if len(args)%2 != 0 {
 		d.CheckError(fmt.Errorf("Must be an even number of key/value pairs"))
 	}
@@ -38,10 +39,10 @@ func applyStructEditsSp(sp spec.Spec, rootVal types.Value, basePath types.Path, 
 			NewValue:   nv,
 		})
 	}
-	appplyPatchSp(sp, rootVal, basePath, patch)
+	return appplyPatchSp(sp, rootVal, basePath, patch)
 }
 
-func appplyPatchSp(sp spec.Spec, rootVal types.Value, basePath types.Path, patch diff.Patch) {
+func appplyPatchSp(sp spec.Spec, rootVal types.Value, basePath types.Path, patch diff.Patch) (path string) {
 	db := sp.GetDatabase()
 	baseVal := basePath.Resolve(rootVal, db)
 	if baseVal == nil {
@@ -56,7 +57,7 @@ func appplyPatchSp(sp spec.Spec, rootVal types.Value, basePath types.Path, patch
 		Hash: r.TargetHash(),
 		Path: basePath,
 	}
-	fmt.Println(newAbsPath.String())
+	return newAbsPath.String()
 }
 
 func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
@@ -76,25 +77,40 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
 	key := args[1]
 	value := args[2]
-	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetDataset("::" + title)
-	d.PanicIfError(err)
-	defer db.Close()
 
+	// Edit
 	str := "Stories::" + title + ".value " + key + " " + value
 	sp, err := spec.ForPath(str)
 	d.PanicIfError(err)
 
 	rootVal, basePath := splitPath(sp)
-	applyStructEditsSp(sp, rootVal, basePath, args)
+	path := applyStructEditsSp(sp, rootVal, basePath, args)
 
-	// A terminer
-	fmt.Fprintf(os.Stdout, "%s\n", str)
-	absPath, err := spec.NewAbsolutePath(str)
+	// Commit
+	cfg := config.NewResolver() //config default db "Stories"
+	fmt.Fprintf(os.Stdout, "%s\n", title)
+	db, ds, err := cfg.GetDataset("::" + title)
+	d.PanicIfError(err)
+	defer db.Close()
+
+	fmt.Fprintf(os.Stdout, "%s\n", path)
+	absPath, err := spec.NewAbsolutePath(path)
 	fmt.Fprintf(os.Stdout, "%s\n", absPath.String())
 	d.CheckError(err)
 
 	valPath := absPath.Resolve(db)
+	if valPath == nil {
+		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", path)))
+	}
+
+	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
+	if oldCommitExists {
+		head := ds.HeadValue()
+		if head.Hash() == valPath.Hash() {
+			fmt.Fprintf(os.Stdout, "Commit aborted - allow-dupe is set to off and this commit would create a duplicate\n")
+			return nil
+		}
+	}
 
 	meta, err := spec.CreateCommitMetaStruct(db, "", "set value %s "+key+" in story : "+title, nil, nil)
 	d.CheckErrorNoUsage(err)
@@ -102,6 +118,11 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
+	if oldCommitExists {
+		fmt.Fprintf(os.Stdout, "New head #%v (was #%v)\n", ds.HeadRef().TargetHash().String(), oldCommitRef.TargetHash().String())
+	} else {
+		fmt.Fprintf(os.Stdout, "New head #%v\n", ds.HeadRef().TargetHash().String())
+	}
 	fmt.Printf("%s edited\n", title)
 
 	return nil
