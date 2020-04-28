@@ -1,4 +1,4 @@
-package util
+package commands
 
 import (
 	"bytes"
@@ -84,4 +84,17 @@ func appplyPatch(db datas.Database, rootVal types.Value, basePath types.Path, pa
 		Path: basePath,
 	}
 	return &newAbsPath
+}
+
+func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
+	db := sp.GetDatabase()
+	rootPath := sp.Path
+	rootPath.Path = types.Path{}
+	rootVal = rootPath.Resolve(db)
+	if rootVal == nil {
+		d.CheckError(fmt.Errorf("Invalid path: %s", sp.String()))
+		return
+	}
+	basePath = sp.Path.Path
+	return
 }

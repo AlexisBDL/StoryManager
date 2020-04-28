@@ -4,13 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"util/*"
 
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
-	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
@@ -19,19 +17,6 @@ var (
 	editEffort      int
 	editDescription string
 )
-
-func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
-	db := sp.GetDatabase()
-	rootPath := sp.Path
-	rootPath.Path = types.Path{}
-	rootVal = rootPath.Resolve(db)
-	if rootVal == nil {
-		d.CheckError(fmt.Errorf("Invalid path: %s", sp.String()))
-		return
-	}
-	basePath = sp.Path.Path
-	return
-}
 
 func runEditStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
