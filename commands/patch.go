@@ -12,6 +12,8 @@ import (
 	"github.com/attic-labs/noms/go/types"
 )
 
+// pourra faire partie d'un package "util" pour optimiser
+
 func argumentToValue(arg string, db datas.Database) (types.Value, error) {
 	if arg == "" {
 		return types.String(""), nil
