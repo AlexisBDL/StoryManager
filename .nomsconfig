@@ -1,0 +1,3 @@
+# Default database URL to be used whenever a database is not explictly provided
+[db.default]
+url = "./Stories"  # This path is relative to the location of .nomsconfig
