@@ -26,6 +26,7 @@ func runListStory(cmd *cobra.Command, args []string) error {
 var listStoryCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Display all stories in database Stories.",
+	Args:  cobra.ExactArgs(0),
 	RunE:  runListStory,
 }
 

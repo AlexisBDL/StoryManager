@@ -21,7 +21,7 @@ var (
 func runEditStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetDataset("::" + title)
+	db, ds, err := cfg.GetDataset(title)
 	d.PanicIfError(err)
 	defer db.Close()
 

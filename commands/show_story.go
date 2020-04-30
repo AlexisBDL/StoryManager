@@ -14,14 +14,19 @@ import (
 func runShowStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetPath("::" + title)
+	db, val, err := cfg.GetPath(title)
 	d.CheckError(err)
 	defer db.Close()
+
+	if val == nil {
+		fmt.Printf("Story %s not found in database\n", title)
+		return nil
+	}
 
 	pgr := outputpager.Start()
 	defer pgr.Stop()
 
-	types.WriteEncodedValue(pgr.Writer, ds)
+	types.WriteEncodedValue(pgr.Writer, val)
 	fmt.Fprintln(pgr.Writer)
 
 	return nil
