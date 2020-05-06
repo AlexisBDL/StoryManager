@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"../util"
+
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
@@ -22,9 +24,9 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	// Create
 	var composition = []string{"description", " ", "effort", "0"}
-	absPath := applyStructEdits(db, types.NewStruct(title, nil), nil, composition)
+	absPath := util.ApplyStructEdits(db, types.NewStruct(title, nil), nil, composition)
 
-	// Commit
+	// Commits
 	value := absPath.Resolve(db)
 	if value == nil {
 		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", absPath.String())))

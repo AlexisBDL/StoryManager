@@ -20,7 +20,7 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver()
 	title := args[0]
 	dest := args[1]
-	sourceStore, sourceObj, err := cfg.GetPath("::" + title)
+	sourceStore, sourceObj, err := cfg.GetPath(title)
 	d.CheckError(err)
 	defer sourceStore.Close()
 
@@ -80,7 +80,7 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 			humanize.Bytes(last.ApproxWrittenBytes), since(start), bytesPerSec(last.ApproxWrittenBytes, start))
 		status.Done()
 	} else if !sinkExists {
-		fmt.Printf("All chunks already exist at destination! Created new dataset %s.\n", dest)
+		fmt.Printf("All chunks already exist at destination! Created new dataset in %s.\n", dest)
 	} else if nonFF && !sourceRef.Equals(sinkRef) {
 		fmt.Printf("Abandoning %s; new head is %s\n", sinkRef.TargetHash(), sourceRef.TargetHash())
 	} else {
@@ -102,8 +102,8 @@ func since(start time.Time) string {
 }
 
 var syncStoryCmd = &cobra.Command{
-	Use:   "sync <title> <destintion>",
-	Short: "Syncronize the story <title> with the databases <detination>.",
+	Use:   "sync <title> <destination>",
+	Short: "Syncronize the story <title> with the databases <destination>.",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runSyncStory,
 }
