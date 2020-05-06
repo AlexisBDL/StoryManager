@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"../util"
+	"github.com/ALexisBDL/StoryManager/util"
 
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
