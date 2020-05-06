@@ -16,10 +16,11 @@ func runListStory(cmd *cobra.Command, args []string) error {
 	d.CheckError(err)
 	defer db.Close()
 
+	var ls []string
 	db.Datasets().IterAll(func(k, v types.Value) {
-		fmt.Println(k)
+		ls = append(ls, fmt.Sprintln(k))
 	})
-
+	//modifier list pour trouver open et close
 	return nil
 }
 
