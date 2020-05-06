@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ALexisBDL/StoryManager/util"
-
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
@@ -24,7 +22,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	// Create
 	var composition = []string{"description", " ", "effort", "0"}
-	absPath := util.ApplyStructEdits(db, types.NewStruct(title, nil), nil, composition)
+	absPath := ApplyStructEdits(db, types.NewStruct(title, nil), nil, composition)
 
 	// Commits
 	value := absPath.Resolve(db)

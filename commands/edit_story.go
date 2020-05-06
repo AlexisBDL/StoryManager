@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"../util"
-
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
@@ -32,24 +30,24 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	sp, err := spec.ForPath(str)
 	d.PanicIfError(err)
 
-	rootVal, basePath := util.SplitPath(sp)
+	rootVal, basePath := SplitPath(sp)
 	var absPath *spec.AbsolutePath
 	var change string
 	switch {
 	case editDescription != "" && editEffort != -1:
 		change = "effort and description"
 		field := []string{"effort", strconv.Itoa(editEffort), "description", editDescription}
-		absPath = util.ApplyStructEdits(db, rootVal, basePath, field)
+		absPath = ApplyStructEdits(db, rootVal, basePath, field)
 		break
 	case editDescription != "":
 		change = "description"
 		field := []string{"description", editDescription}
-		absPath = util.ApplyStructEdits(db, rootVal, basePath, field)
+		absPath = ApplyStructEdits(db, rootVal, basePath, field)
 		break
 	case editEffort != -1:
 		change = "effort"
 		field := []string{"effort", strconv.Itoa(editEffort)}
-		absPath = util.ApplyStructEdits(db, rootVal, basePath, field)
+		absPath = ApplyStructEdits(db, rootVal, basePath, field)
 		break
 	}
 

@@ -8,5 +8,4 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
 	github.com/spf13/cobra v1.0.0
-	github.com/AlexisBDL/StoryManager/util v1.14.0
 )
