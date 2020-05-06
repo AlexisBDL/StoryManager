@@ -8,7 +8,6 @@ import (
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
-	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
@@ -21,8 +20,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	defer db.Close()
 
 	// Create
-	var composition = []string{"description", " ", "effort", "0"}
-	absPath := ApplyStructEdits(db, types.NewStruct(title, nil), nil, composition)
+	absPath := ApplyStructEdits(db, NewStory(title), nil, nil)
 
 	// Commits
 	value := absPath.Resolve(db)
