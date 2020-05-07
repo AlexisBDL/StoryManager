@@ -6,7 +6,7 @@ import (
 
 var storyCmd = &cobra.Command{
 	Use:   "story",
-	Short: "Show, Create, delete or set a story",
+	Short: "MAnage a story",
 }
 
 func init() {

@@ -7,7 +7,6 @@ import (
 	"github.com/attic-labs/noms/go/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/types"
-	"github.com/attic-labs/noms/go/util/outputpager"
 
 	"github.com/spf13/cobra"
 )
@@ -33,9 +32,6 @@ func runListStory(cmd *cobra.Command, args []string) error {
 	db.Datasets().IterAll(func(k, v types.Value) {
 		ls = append(ls, fmt.Sprint(k))
 	})
-
-	pgr := outputpager.Start()
-	defer pgr.Stop()
 
 	var (
 		lsOpen   []string

@@ -95,7 +95,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 }
 
 var editStoryCmd = &cobra.Command{
-	Use:   "edit <title> [flag] <value>",
+	Use:   "edit <ID> [flag] <value>",
 	Short: "Edit a field of story.",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runEditStory,

@@ -12,14 +12,14 @@ import (
 )
 
 func runShowStory(cmd *cobra.Command, args []string) error {
-	title := args[0]
+	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetPath(title)
+	db, ds, err := cfg.GetPath(ID)
 	d.CheckError(err)
 	defer db.Close()
 
 	if ds == nil {
-		fmt.Printf("Story %s not found in database\n", title)
+		fmt.Printf("Story %s not found in database\n", ID)
 		return nil
 	}
 
@@ -33,7 +33,7 @@ func runShowStory(cmd *cobra.Command, args []string) error {
 }
 
 var showStoryCmd = &cobra.Command{
-	Use:   "show <title>",
+	Use:   "show <ID>",
 	Short: "show a story.",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runShowStory,

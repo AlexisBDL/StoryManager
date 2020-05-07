@@ -19,19 +19,19 @@ import (
 const parallelism = 16
 
 func runLogStory(cmd *cobra.Command, args []string) error {
-	title := args[0]            //dataset or value to display history for
+	ID := args[0]               //dataset or value to display history for
 	cfg := config.NewResolver() //config default db "Stories"
 
-	o := NewOpts(title)
+	o := NewOpts(ID)
 
-	resolved := cfg.ResolvePathSpec(title)
+	resolved := cfg.ResolvePathSpec(ID)
 	sp, err := spec.ForPath(resolved)
 	d.CheckErrorNoUsage(err)
 	defer sp.Close()
 
 	pinned, ok := sp.Pin()
 	if !ok {
-		fmt.Fprintf(os.Stderr, "Cannot resolve spec: %s\n", title)
+		fmt.Fprintf(os.Stderr, "Cannot resolve spec: %s\n", ID)
 		return nil
 	}
 	defer pinned.Close()
