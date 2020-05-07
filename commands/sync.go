@@ -74,7 +74,7 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 		log.Fatal(err)
 	}
 
-	close(progressCh)
+	//close(progressCh)
 	if last := <-lastProgressCh; last.DoneCount > 0 {
 		status.Printf("Done - Synced %s in %s (%s/s)",
 			humanize.Bytes(last.ApproxWrittenBytes), since(start), bytesPerSec(last.ApproxWrittenBytes, start))

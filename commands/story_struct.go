@@ -10,6 +10,7 @@ func NewStory(title string) types.Struct {
 	fields["Title"] = types.String(title)
 	fields["Description"] = types.String("")
 	fields["Effort"] = types.Number(0)
+	fields["Stat"] = types.String("Open")
 
 	return types.NewStruct("Story", fields)
 }
