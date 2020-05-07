@@ -17,6 +17,12 @@ var (
 	close bool
 )
 
+const (
+	state    = ".value.State"
+	strOpen  = "Open"
+	strClose = "Close"
+)
+
 func runListStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
 	db, err := cfg.GetDatabase("")
@@ -31,16 +37,21 @@ func runListStory(cmd *cobra.Command, args []string) error {
 	pgr := outputpager.Start()
 	defer pgr.Stop()
 
-	var lsOpen []string
-	var lsClose []string
+	var (
+		lsOpen   []string
+		lsClose  []string
+		valState types.Value
+		str      string
+	)
+
 	for _, v := range ls {
-		_, stat, _ := cfg.GetPath(v + ".value.Stat")
-		str, err := strconv.Unquote(types.EncodedValue(stat))
+		_, valState, _ = cfg.GetPath(v + state)
+		str, err = strconv.Unquote(types.EncodedValue(valState))
 		d.PanicIfError(err)
-		if str == "Open" {
+		if str == strOpen {
 			lsOpen = append(lsOpen, v)
 		}
-		if str == "Close" {
+		if str == strClose {
 			lsClose = append(lsClose, v)
 		}
 	}
@@ -49,14 +60,11 @@ func runListStory(cmd *cobra.Command, args []string) error {
 		for _, v := range lsOpen {
 			fmt.Println(v)
 		}
-	}
-	if close {
+	} else if close {
 		for _, v := range lsClose {
 			fmt.Println(v)
 		}
-	}
-
-	if !close && !open {
+	} else if !close && !open {
 		for _, v := range ls {
 			fmt.Println(v)
 		}
@@ -68,6 +76,7 @@ func runListStory(cmd *cobra.Command, args []string) error {
 var listStoryCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Display stories in database Stories.",
+	Long:  "It's possible to filtred the displayed stories whith flags",
 	Args:  cobra.ExactArgs(0),
 	RunE:  runListStory,
 }
