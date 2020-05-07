@@ -3,27 +3,21 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/attic-labs/noms/go/config"
-	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/spec"
 
+	"github.com/attic-labs/noms/go/datas"
+
+	"github.com/attic-labs/noms/go/d"
+	"github.com/attic-labs/noms/go/spec"
 	"github.com/spf13/cobra"
 )
 
-var (
-	editTitle       string
-	editEffort      int
-	editDescription string
-)
-
-func runEditStory(cmd *cobra.Command, args []string) error {
+func runCloseStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
 
-	// Edit
+	// Edit close
 	resolved := cfg.ResolvePathSpec(ID) + commitStory
 	sp, err := spec.ForPath(resolved)
 	d.PanicIfError(err)
@@ -40,25 +34,9 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 
 	rootVal, basePath := SplitPath(sp)
 
-	var (
-		absPath *spec.AbsolutePath
-		change  string
-		field   []string
-	)
-	if editDescription != "" {
-		change += "description "
-		field = append(field, "Description", editDescription)
-	}
-	if editEffort != -1 {
-		change += "effort "
-		field = append(field, "Effort", strconv.Itoa(editEffort))
-	}
-	if editTitle != "" {
-		change += "title "
-		field = append(field, "Title", editTitle)
-	}
+	field := []string{"State", strClose}
 
-	absPath = ApplyStructEdits(db, rootVal, basePath, field)
+	absPath := ApplyStructEdits(db, rootVal, basePath, field)
 
 	// Commit
 	valPath := absPath.Resolve(db)
@@ -75,7 +53,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Edit value "+change+"in story : "+ID, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", ID+" was closed", nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
@@ -86,28 +64,18 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	} else {
 		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
 	}
-	fmt.Printf("%s edited\n", ID)
+	fmt.Printf("%s closed\n", ID)
 
 	return nil
 }
 
-var editStoryCmd = &cobra.Command{
-	Use:   "edit <ID> [flag] <value>",
-	Short: "Edit a field of story.",
+var closeStoryCmd = &cobra.Command{
+	Use:   "close",
+	Short: "Close a story",
 	Args:  cobra.ExactArgs(1),
-	RunE:  runEditStory,
+	RunE:  runCloseStory,
 }
 
 func init() {
-	storyCmd.AddCommand(editStoryCmd)
-
-	editStoryCmd.Flags().IntVarP(&editEffort, "effort", "e", -1,
-		"Provide an effort to evaluate the story",
-	)
-	editStoryCmd.Flags().StringVarP(&editDescription, "description", "d", "",
-		"Provide a message to describe the story, use \"\" to add more than one word",
-	)
-	editStoryCmd.Flags().StringVarP(&editTitle, "title", "t", "",
-		"Change the title of the story",
-	)
+	storyCmd.AddCommand(closeStoryCmd)
 }

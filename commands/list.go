@@ -16,12 +16,6 @@ var (
 	close bool
 )
 
-const (
-	state    = ".value.State"
-	strOpen  = "Open"
-	strClose = "Close"
-)
-
 func runListStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
 	db, err := cfg.GetDatabase("")
@@ -41,7 +35,7 @@ func runListStory(cmd *cobra.Command, args []string) error {
 	)
 
 	for _, v := range ls {
-		_, valState, _ = cfg.GetPath(v + state)
+		_, valState, _ = cfg.GetPath(v + storyState)
 		str, err = strconv.Unquote(types.EncodedValue(valState))
 		d.PanicIfError(err)
 		if str == strOpen {
