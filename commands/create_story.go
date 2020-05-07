@@ -13,14 +13,14 @@ import (
 )
 
 func runCreateStory(cmd *cobra.Command, args []string) error {
-	title := args[0]
+	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	db, ds, err := cfg.GetDataset(title)
+	db, ds, err := cfg.GetDataset(ID)
 	d.PanicIfError(err)
 	defer db.Close()
 
 	// Create
-	absPath := ApplyStructEdits(db, NewStory(title), nil, nil)
+	absPath := ApplyStructEdits(db, NewStory(ID), nil, nil)
 
 	// Commits
 	value := absPath.Resolve(db)
@@ -30,23 +30,23 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
 	if oldCommitExists {
-		fmt.Printf("Create aborted - %s allready exist (is #%s)\n", title, oldCommitRef.TargetHash().String())
+		fmt.Printf("Create aborted - %s allready exist (is #%s)\n", ID, oldCommitRef.TargetHash().String())
 		return nil
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+title, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+ID, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
-	fmt.Printf("%s was created\n", title)
+	fmt.Printf("%s was created\n", ID)
 
 	return nil
 }
 
 var createStoryCmd = &cobra.Command{
-	Use:   "create <title>",
+	Use:   "create <ID>",
 	Short: "Create a new story.",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runCreateStory,

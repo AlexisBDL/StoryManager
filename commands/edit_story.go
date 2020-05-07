@@ -20,46 +20,47 @@ var (
 	editDescription string
 )
 
+const value = ".value"
+
 func runEditStory(cmd *cobra.Command, args []string) error {
-	title := args[0]
+	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
 
 	// Edit
-	resolved := cfg.ResolvePathSpec(title) + ".value" //.value acces story
+	resolved := cfg.ResolvePathSpec(ID) + value
 	sp, err := spec.ForPath(resolved)
 	d.PanicIfError(err)
 	defer sp.Close()
 
 	pinned, ok := sp.Pin()
 	if !ok {
-		fmt.Fprintf(os.Stderr, "Cannot resolve spec: %s\n", title)
+		fmt.Fprintf(os.Stderr, "Cannot resolve spec: %s\n", ID)
 		return nil
 	}
 
 	db := pinned.GetDatabase()
-	ds := db.GetDataset(title)
+	ds := db.GetDataset(ID)
 
 	rootVal, basePath := SplitPath(sp)
-	var absPath *spec.AbsolutePath
-	var change string
-	var field []string
+
+	var (
+		absPath *spec.AbsolutePath
+		change  string
+		field   []string
+	)
 	if editDescription != "" {
 		change += "description "
 		field = append(field, "Description", editDescription)
-		fmt.Println("desc")
 	}
 	if editEffort != -1 {
 		change += "effort "
 		field = append(field, "Effort", strconv.Itoa(editEffort))
-		fmt.Println("eff")
 	}
 	if editTitle != "" {
 		change += "title "
 		field = append(field, "Title", editTitle)
-		fmt.Println("title")
 	}
 
-	fmt.Println(field)
 	absPath = ApplyStructEdits(db, rootVal, basePath, field)
 
 	// Commit
@@ -77,7 +78,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Edit value "+change+"in story : "+title, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Edit value "+change+"in story : "+ID, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
@@ -88,7 +89,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	} else {
 		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
 	}
-	fmt.Printf("%s edited\n", title)
+	fmt.Printf("%s edited\n", ID)
 
 	return nil
 }
