@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/attic-labs/noms/go/config"
-	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/spec"
-	"github.com/attic-labs/noms/go/types"
+	"github.com/AlexisBDL/StoryManager/noms/config"
+	"github.com/AlexisBDL/StoryManager/noms/go/d"
+	"github.com/AlexisBDL/StoryManager/noms/go/datas"
+	"github.com/AlexisBDL/StoryManager/noms/go/spec"
+	"github.com/AlexisBDL/StoryManager/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
