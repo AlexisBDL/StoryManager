@@ -1,5 +1,8 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+github.com/attic-labs/noms v0.0.0-20200410174738-39057233bfdd h1:a+CxT4fiPE5h65ghMaCNmO5HXHlP8WLxt8kXceNRJAs=
+github.com/attic-labs/noms v0.0.0-20200410174738-39057233bfdd/go.mod h1:qhMSThkSBnQ2QGe2Y5QAlTNjPtpyV2abaKPJRVmpr4A=
+github.com/attic-labs/noms/noms v0.0.0-20200511143217-ad33a7deea92 h1:6Gaq7z0kJFWRNiSkVyf5J6UPzpVn9TCOnowfuvP8hlo=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/MichaelMure/git-bug v0.0.0-20200123234644-9f7953161f3e h1:zGZ+5a/lAWm0hE8mP3A/6kY7fgiJ6wsga11phCnK2Xc=
@@ -11,8 +14,12 @@ github.com/abuan/gitus v0.0.0-20200203134244-1dcd06fbffb1/go.mod h1:7VzRitbZula0
 github.com/alecthomas/kingpin v2.2.6+incompatible/go.mod h1:59OFYbFVLKQKq+mqrL6Rw5bR0c3ACQaawgXx0QYndlE=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc h1:cAKDfWh5VpdgMhJosfJnn5/FoN2SRZ4p7fJNX58YPaU=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
+github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 h1:JYp7IbQjafoB+tBA3gMyHYHrpOtNuDiK/uB5uXxq5wM=
+github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf h1:qet1QNfXsQxTZqLG4oE62mJzwPIB8+Tee4RNCL9ulrY=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
+github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d h1:UQZhZ2O0vMHr2cI+DC1Mbh0TJxzA3RcLoMsFw+aXw7E=
+github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d/go.mod h1:rBZYJk541a8SKzHPHnH3zbiI+7dagKZ0cgpgrD7Fyho=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
 github.com/attic-labs/graphql v0.0.0-20190507195614-b6552d20145f h1:WMEteRGdJItAZfxaCPyL6SEfyh4+bE+LsN50UKz46EA=
 github.com/attic-labs/graphql v0.0.0-20190507195614-b6552d20145f/go.mod h1:1U3eDKPYQXn3o4jpC2rAlH9THIo+ZOKWSI0FyeG1SEI=
