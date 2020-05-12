@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/AlexisBdl/StoryManager/commands"
+	"github.com/AlexisBDL/StoryManager/commands"
 )
 
 func main() {
