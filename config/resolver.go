@@ -1,7 +1,3 @@
-// Copyright 2016 Attic Labs, Inc. All rights reserved.
-// Licensed under the Apache License, version 2.0:
-// http://www.apache.org/licenses/LICENSE-2.0
-
 package config
 
 import (
@@ -21,14 +17,14 @@ type Resolver struct {
 }
 
 // A Resolver enables using db defaults, db aliases and dataset '.' replacement in command
-// line arguments when a .nomsconfig file is present. To use it, create a config resolver
+// line arguments when a .dbconfig file is present. To use it, create a config resolver
 // before command line processing and use it to resolve each dataspec argument in
 // succession.
 func NewResolver() *Resolver {
-	c, err := FindNomsConfig()
+	c, err := FindConfig()
 	if err != nil {
 		if err != NoConfig {
-			panic(fmt.Errorf("Failed to read .nomsconfig due to: %v", err))
+			panic(fmt.Errorf("Failed to read .dbconfig due to: %v", err))
 		}
 		return &Resolver{}
 	}

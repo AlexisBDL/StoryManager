@@ -1,7 +1,3 @@
-// Copyright 2016 Attic Labs, Inc. All rights reserved.
-// Licensed under the Apache License, version 2.0:
-// http://www.apache.org/licenses/LICENSE-2.0
-
 package config
 
 import (
@@ -19,29 +15,37 @@ import (
 type Config struct {
 	File string
 	Db   map[string]DbConfig
+	User UserConfig
 }
 
 type DbConfig struct {
 	Url string
 }
 
+type UserConfig struct {
+	FirstName string
+	LastName  string
+	Fonction  string
+}
+
 const (
-	NomsConfigFile = ".nomsconfig"
+	ConfigFile     = ".dbconfig"
 	DefaultDbAlias = "default"
+	UserDbAlias    = "user"
 )
 
-var NoConfig = errors.New(fmt.Sprintf("no %s found", NomsConfigFile))
+var NoConfig = errors.New(fmt.Sprintf("no %s found", ConfigFile))
 
-// Find the closest directory containing .nomsconfig starting
+// Find the closest directory containing .dbconfig starting
 // in cwd and then searching up ancestor tree.
 // Look first looking in cwd and then up through its ancestors
-func FindNomsConfig() (*Config, error) {
+func FindConfig() (*Config, error) {
 	curDir, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
 	for {
-		nomsConfig := filepath.Join(curDir, NomsConfigFile)
+		nomsConfig := filepath.Join(curDir, ConfigFile)
 		info, err := os.Stat(nomsConfig)
 		if err == nil && !info.IsDir() {
 			// found
@@ -81,7 +85,7 @@ func NewConfig(data string) (*Config, error) {
 }
 
 func (c *Config) WriteTo(configHome string) (string, error) {
-	file := filepath.Join(configHome, NomsConfigFile)
+	file := filepath.Join(configHome, ConfigFile)
 	if err := os.MkdirAll(filepath.Dir(file), os.ModePerm); err != nil {
 		return "", err
 	}

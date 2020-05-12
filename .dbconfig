@@ -2,7 +2,7 @@
 [db.default]
 url = "./Stories"  # This path is relative to the location of .config
 
-[user]
+[db.user]
 FirstName = "Alexis"
 Lastname = "Bredel"
 Status = "PO"

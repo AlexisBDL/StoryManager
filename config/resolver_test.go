@@ -35,6 +35,11 @@ var (
 			DefaultDbAlias: {localSpec},
 			remoteAlias:    {remoteSpec},
 		},
+		UserConfig{
+			"TestFirstName",
+			"TestLastName",
+			"PO",
+		},
 	}
 
 	dbTestsNoAliases = []testData{

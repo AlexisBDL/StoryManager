@@ -32,6 +32,11 @@ var (
 			DefaultDbAlias: {nbsSpec},
 			remoteAlias:    {httpSpec},
 		},
+		UserConfig{
+			"TestFirstName",
+			"TestLastName",
+			"PO",
+		},
 	}
 
 	httpConfig = &Config{
@@ -39,6 +44,11 @@ var (
 		map[string]DbConfig{
 			DefaultDbAlias: {httpSpec},
 			remoteAlias:    {nbsSpec},
+		},
+		UserConfig{
+			"TestFirstName",
+			"TestLastName",
+			"PO",
 		},
 	}
 
@@ -48,6 +58,11 @@ var (
 			DefaultDbAlias: {memSpec},
 			remoteAlias:    {httpSpec},
 		},
+		UserConfig{
+			"TestFirstName",
+			"TestLastName",
+			"PO",
+		},
 	}
 
 	ldbAbsConfig = &Config{
@@ -55,6 +70,11 @@ var (
 		map[string]DbConfig{
 			DefaultDbAlias: {nbsAbsSpec},
 			remoteAlias:    {httpSpec},
+		},
+		UserConfig{
+			"TestFirstName",
+			"TestLastName",
+			"PO",
 		},
 	}
 )
@@ -70,7 +90,7 @@ func getPaths(assert *assert.Assertions, base string) paths {
 	abs, err = filepath.EvalSymlinks(ctestRoot)
 	assert.NoError(err)
 	home := filepath.Join(abs, base)
-	config := filepath.Join(home, NomsConfigFile)
+	config := filepath.Join(home, ConfigFile)
 	return paths{home, config}
 }
 
@@ -124,7 +144,7 @@ func TestConfig(t *testing.T) {
 
 	// Test from home
 	assert.NoError(os.Chdir(path.home))
-	c, err := FindNomsConfig()
+	c, err := FindConfig()
 	assert.NoError(err, path.config)
 	validateConfig(assert, path.config, ldbConfig, c)
 
@@ -132,16 +152,16 @@ func TestConfig(t *testing.T) {
 	subdir := filepath.Join(path.home, "subdir")
 	assert.NoError(os.MkdirAll(subdir, os.ModePerm))
 	assert.NoError(os.Chdir(subdir))
-	c, err = FindNomsConfig()
+	c, err = FindConfig()
 	assert.NoError(err, path.config)
 	validateConfig(assert, path.config, ldbConfig, c)
 
 	// Test from subdir with intervening .nomsconfig directory
-	nomsDir := filepath.Join(subdir, NomsConfigFile)
+	nomsDir := filepath.Join(subdir, ConfigFile)
 	err = os.MkdirAll(nomsDir, os.ModePerm)
 	assert.NoError(err, nomsDir)
 	assert.NoError(os.Chdir(subdir))
-	c, err = FindNomsConfig()
+	c, err = FindConfig()
 	assert.NoError(err, path.config)
 	validateConfig(assert, path.config, ldbConfig, c)
 }
@@ -157,7 +177,7 @@ func TestUnreadableConfig(t *testing.T) {
 	writeConfig(assert, ldbConfig, path.home)
 	assert.NoError(os.Chmod(path.config, 0333)) // write-only
 	assert.NoError(os.Chdir(path.home))
-	_, err := FindNomsConfig()
+	_, err := FindConfig()
 	assert.Error(err, path.config)
 }
 
@@ -166,7 +186,7 @@ func TestNoConfig(t *testing.T) {
 	path := getPaths(assert, "home.none")
 	assert.NoError(os.MkdirAll(path.home, os.ModePerm))
 	assert.NoError(os.Chdir(path.home))
-	_, err := FindNomsConfig()
+	_, err := FindConfig()
 	assert.Equal(NoConfig, err)
 }
 
@@ -177,7 +197,7 @@ func TestBadConfig(t *testing.T) {
 	// overwrite with something invalid
 	assert.NoError(ioutil.WriteFile(cfile, []byte("invalid config"), os.ModePerm))
 	assert.NoError(os.Chdir(path.home))
-	_, err := FindNomsConfig()
+	_, err := FindConfig()
 	assert.Error(err, path.config)
 }
 
@@ -188,7 +208,7 @@ func TestQualifyingPaths(t *testing.T) {
 
 	for _, tc := range []*Config{httpConfig, memConfig, ldbAbsConfig} {
 		writeConfig(assert, tc, path.home)
-		ac, err := FindNomsConfig()
+		ac, err := FindConfig()
 		assert.NoError(err, path.config)
 		validateConfig(assert, path.config, tc, ac)
 	}
