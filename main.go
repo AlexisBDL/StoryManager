@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/attic-labs/noms/commands"
+	"github.com/AlexisBdl/StoryManager/commands"
 )
 
 func main() {
