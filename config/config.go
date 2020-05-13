@@ -1,7 +1,6 @@
 package config
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,17 +8,11 @@ import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
-	"github.com/attic-labs/noms/go/spec"
 )
 
 type Config struct {
-	File string
-	Db   map[string]DbConfig
+	Db   string
 	User UserConfig
-}
-
-type DbConfig struct {
-	Url string
 }
 
 type UserConfig struct {
@@ -45,11 +38,11 @@ func FindConfig() (*Config, error) {
 		return nil, err
 	}
 	for {
-		nomsConfig := filepath.Join(curDir, ConfigFile)
-		info, err := os.Stat(nomsConfig)
+		conf := filepath.Join(curDir, ConfigFile)
+		info, err := os.Stat(conf)
 		if err == nil && !info.IsDir() {
 			// found
-			return ReadConfig(nomsConfig)
+			return ReadConfig(conf)
 		} else if err != nil && !os.IsNotExist(err) {
 			// can't read
 			return nil, err
@@ -68,78 +61,9 @@ func ReadConfig(name string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	c, err := NewConfig(string(data))
-	if err != nil {
+	var conf Config
+	if _, err := toml.Decode(string(data), &conf); err != nil {
 		return nil, err
 	}
-	c.File = name
-	return qualifyPaths(name, c)
-}
-
-func NewConfig(data string) (*Config, error) {
-	c := new(Config)
-	if _, err := toml.Decode(data, c); err != nil {
-		return nil, err
-	}
-	return c, nil
-}
-
-func (c *Config) WriteTo(configHome string) (string, error) {
-	file := filepath.Join(configHome, ConfigFile)
-	if err := os.MkdirAll(filepath.Dir(file), os.ModePerm); err != nil {
-		return "", err
-	}
-	if err := ioutil.WriteFile(file, []byte(c.writeableString()), os.ModePerm); err != nil {
-		return "", err
-	}
-	return file, nil
-}
-
-// Replace relative directory in path part of spec with an absolute
-// directory. Assumes the path is relative to the location of the config file
-func absDbSpec(configHome string, url string) string {
-	dbSpec, err := spec.ForDatabase(url)
-	if err != nil {
-		return url
-	}
-	if dbSpec.Protocol != "nbs" {
-		return url
-	}
-	dbName := dbSpec.DatabaseName
-	if !filepath.IsAbs(dbName) {
-		dbName = filepath.Join(configHome, dbName)
-	}
-	return "nbs:" + dbName
-}
-
-func qualifyPaths(configPath string, c *Config) (*Config, error) {
-	file, err := filepath.Abs(configPath)
-	if err != nil {
-		return nil, err
-	}
-	dir := filepath.Dir(file)
-	qc := *c
-	qc.File = file
-	for k, r := range c.Db {
-		qc.Db[k] = DbConfig{absDbSpec(dir, r.Url)}
-	}
-	return &qc, nil
-}
-
-func (c *Config) String() string {
-	var buffer bytes.Buffer
-	if c.File != "" {
-		buffer.WriteString(fmt.Sprintf("file = %s\n", c.File))
-	}
-	buffer.WriteString(c.writeableString())
-	return buffer.String()
-}
-
-func (c *Config) writeableString() string {
-	var buffer bytes.Buffer
-	for k, r := range c.Db {
-		buffer.WriteString(fmt.Sprintf("[db.%s]\n", k))
-		buffer.WriteString(fmt.Sprintf("\t"+`url = "%s"`+"\n", r.Url))
-	}
-	return buffer.String()
+	return &conf, err
 }

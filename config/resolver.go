@@ -48,10 +48,7 @@ func (r *Resolver) verbose(orig string, replacement string) string {
 func (r *Resolver) ResolveDbSpec(str string) string {
 	if r.config != nil {
 		if str == "" {
-			return r.config.Db[DefaultDbAlias].Url
-		}
-		if val, ok := r.config.Db[str]; ok {
-			return val.Url
+			return r.config.Db
 		}
 	}
 	return str
