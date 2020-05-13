@@ -121,3 +121,16 @@ func (r *Resolver) GetPath(str string) (datas.Database, types.Value, error) {
 	}
 	return sp.GetDatabase(), sp.GetValue(), nil
 }
+
+func (r *Resolver) GetUser() UserConfig {
+	if r.config.User.FirstName == "" {
+		panic(fmt.Errorf("Failed to read User.FirstName in .dbconfig"))
+	}
+	if r.config.User.LastName == "" {
+		panic(fmt.Errorf("Failed to read User.LastName in .dbconfig"))
+	}
+	if r.config.User.Fonction == "" {
+		panic(fmt.Errorf("Failed to read User.Fonction in .dbconfig"))
+	}
+	return r.config.User
+}
