@@ -8,10 +8,11 @@ import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/attic-labs/noms/go/spec"
 )
 
 type Config struct {
-	Db   string
+	Url  string
 	User UserConfig
 }
 
@@ -22,10 +23,14 @@ type UserConfig struct {
 }
 
 const (
-	ConfigFile     = ".dbconfig"
-	DefaultDbAlias = "default"
-	UserDbAlias    = "user"
+	ConfigFile  = ".dbconfig"
+	UserDbAlias = "user"
 )
+
+type Configs struct {
+	File string
+	Conf map[string]Config
+}
 
 var NoConfig = errors.New(fmt.Sprintf("no %s found", ConfigFile))
 
@@ -61,9 +66,50 @@ func ReadConfig(name string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	var conf Config
-	if _, err := toml.Decode(string(data), &conf); err != nil {
+	c, err := NewConfig(string(data))
+	if err != nil {
 		return nil, err
 	}
-	return &conf, err
+	c.File = name
+	return qualifyPaths(name, c)
+}
+
+func NewConfig(data string) (*Configs, error) {
+	c := new(Configs)
+	if _, err := toml.Decode(string(data), &c.Conf); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
+func qualifyPaths(configPath string, c *Configs) (*Config, error) {
+	file, err := filepath.Abs(configPath)
+	if err != nil {
+		return nil, err
+	}
+	dir := filepath.Dir(file)
+	qc := *c
+	qc.File = file
+	for k, r := range c.Conf {
+		qc.Conf[k] = Config{absDbSpec(dir, r.Url), r.User}
+	}
+	res := qc.Conf["db"]
+	return &res, nil
+}
+
+// Replace relative directory in path part of spec with an absolute
+// directory. Assumes the path is relative to the location of the config file
+func absDbSpec(configHome string, url string) string {
+	dbSpec, err := spec.ForDatabase(url)
+	if err != nil {
+		return url
+	}
+	if dbSpec.Protocol != "nbs" {
+		return url
+	}
+	dbName := dbSpec.DatabaseName
+	if !filepath.IsAbs(dbName) {
+		dbName = filepath.Join(configHome, dbName)
+	}
+	return "nbs:" + dbName
 }

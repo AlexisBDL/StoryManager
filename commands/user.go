@@ -8,11 +8,10 @@ import (
 )
 
 func runUser(cmd *cobra.Command, args []string) error {
-	cfg := config.NewResolver() //config default db "Stories"
-
+	cfg := config.NewResolver()
 	user := cfg.GetUser()
 
-	fmt.Println(user.FirstName + "\n" + user.LastName + "\n" + user.Fonction)
+	fmt.Println(user.FirstName, user.LastName, user.Fonction)
 
 	return nil
 }

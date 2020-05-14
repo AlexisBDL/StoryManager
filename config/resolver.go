@@ -44,11 +44,10 @@ func (r *Resolver) verbose(orig string, replacement string) string {
 
 // Resolve string to database name. If config is defined:
 //   - replace the empty string with the default db url
-//   - replace any db alias with it's url
 func (r *Resolver) ResolveDbSpec(str string) string {
 	if r.config != nil {
 		if str == "" {
-			return r.config.Db
+			return r.config.Url
 		}
 	}
 	return str
@@ -78,7 +77,6 @@ func (r *Resolver) ResolvePathSpec(str string) string {
 }
 
 // Resolve string to database spec. If a config is present,
-//   - resolve a db alias to its db spec
 //   - resolve "" to the default db spec
 func (r *Resolver) GetDatabase(str string) (datas.Database, error) {
 	sp, err := spec.ForDatabase(r.verbose(str, r.ResolveDbSpec(str)))
@@ -120,14 +118,5 @@ func (r *Resolver) GetPath(str string) (datas.Database, types.Value, error) {
 }
 
 func (r *Resolver) GetUser() UserConfig {
-	if r.config.User.FirstName == "" {
-		panic(fmt.Errorf("Failed to read User.FirstName in .dbconfig"))
-	}
-	if r.config.User.LastName == "" {
-		panic(fmt.Errorf("Failed to read User.LastName in .dbconfig"))
-	}
-	if r.config.User.Fonction == "" {
-		panic(fmt.Errorf("Failed to read User.Fonction in .dbconfig"))
-	}
 	return r.config.User
 }
