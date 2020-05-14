@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/attic-labs/noms/go/config"
+	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/attic-labs/noms/go/d"
 
 	"github.com/spf13/cobra"
