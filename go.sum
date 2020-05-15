@@ -5,6 +5,7 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/MichaelMure/git-bug v0.0.0-20200123234644-9f7953161f3e h1:zGZ+5a/lAWm0hE8mP3A/6kY7fgiJ6wsga11phCnK2Xc=
 github.com/MichaelMure/git-bug v0.0.0-20200123234644-9f7953161f3e/go.mod h1:46dL8s0Y4Kk1aiISqzlOcAQbFozuZuxn770wgrumQqE=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
+github.com/aboodman/noms-gx v0.0.0-20180714061401-d6cb97cb040b h1:6pe29GhapzKB4egv5gr8JHHFiExf2m81JJw4BKDBC6g=
 github.com/aboodman/noms-gx v0.0.0-20180714061401-d6cb97cb040b/go.mod h1:ni7quUEZfdz5Q36a9VJgeUlTaYfwY3fS3j/v5WIz8zs=
 github.com/abuan/gitus v0.0.0-20200203134244-1dcd06fbffb1 h1:b04FyMzEhlmrUhCjUhn4iq9Ao4eUWzgbZamn/D9GN0Q=
 github.com/abuan/gitus v0.0.0-20200203134244-1dcd06fbffb1/go.mod h1:7VzRitbZula0DToiBZFrE7Uolb5ydZiD7BD94150RgM=
