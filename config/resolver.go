@@ -6,7 +6,6 @@ import (
 
 	"github.com/AlexisBDL/StoryManager/spec"
 
-	"github.com/aboodman/noms-gx/go/d"
 	"github.com/attic-labs/noms/go/chunks"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/types"
@@ -122,8 +121,10 @@ func (r *Resolver) GetUser() UserConfig {
 	return r.config.User
 }
 
-func (r *Resolver) FindDatabase(str string) bool {
+func (r *Resolver) FindDatabase(str string) (bool, error) {
 	sp, err := spec.ForDatabase(r.verbose(str, r.ResolveDbSpec(str)))
-	d.PanicIfError(err)
-	return sp.FindDatabase()
+	if err != nil {
+		return false, err
+	}
+	return sp.FindDatabase(), nil
 }

@@ -20,9 +20,13 @@ var (
 func runListStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
 
-	if !cfg.FindDatabase(dbTarget) {
-		fmt.Printf("Database not found at %s\n", dbTarget)
-		return nil
+	if dbTarget != "" {
+		find, err := cfg.FindDatabase(dbTarget)
+		if !find {
+			fmt.Printf("Database not found at %s\n", dbTarget)
+			d.PanicIfError(err)
+			return nil
+		}
 	}
 
 	db, err := cfg.GetDatabase(dbTarget)
@@ -90,4 +94,5 @@ func init() {
 	listStoryCmd.Flags().Lookup("close").NoOptDefVal = "true"
 
 	listStoryCmd.Flags().StringVarP(&dbTarget, "db", "d", "", "Display stories in other database path")
+	listStoryCmd.Flags().Lookup("db").NoOptDefVal = ""
 }

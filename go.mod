@@ -4,7 +4,6 @@ go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/aboodman/noms-gx v0.0.0-20180714061401-d6cb97cb040b
 	github.com/attic-labs/noms v0.0.0-20200410174738-39057233bfdd
 	github.com/aws/aws-sdk-go v1.19.26
 	github.com/dustin/go-humanize v1.0.0

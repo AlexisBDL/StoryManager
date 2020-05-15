@@ -167,7 +167,7 @@ func (sp Spec) String() string {
 // describes. The same Database instance is returned every time, unless Close
 // is called. If the Spec is closed, it is re-opened with a new Database.
 func (sp Spec) GetDatabase() datas.Database {
-	if sp.FindDatabase() {
+	if *sp.db == nil {
 		*sp.db = sp.createDatabase()
 	}
 	return *sp.db
