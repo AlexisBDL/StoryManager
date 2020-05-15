@@ -12,13 +12,15 @@ import (
 )
 
 var (
-	open  bool
-	close bool
+	open     bool
+	close    bool
+	dbTarget string
 )
 
 func runListStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
-	db, err := cfg.GetDatabase("")
+
+	db, err := cfg.GetDatabase(dbTarget)
 	d.CheckError(err)
 	defer db.Close()
 
@@ -50,11 +52,13 @@ func runListStory(cmd *cobra.Command, args []string) error {
 		for _, v := range lsOpen {
 			fmt.Println(v)
 		}
-	} else if close {
+	}
+	if close {
 		for _, v := range lsClose {
 			fmt.Println(v)
 		}
-	} else if !close && !open {
+	}
+	if !close && !open {
 		for _, v := range ls {
 			fmt.Println(v)
 		}
@@ -79,4 +83,6 @@ func init() {
 
 	listStoryCmd.Flags().BoolVarP(&close, "close", "c", false, "Display close stories")
 	listStoryCmd.Flags().Lookup("close").NoOptDefVal = "true"
+
+	listStoryCmd.Flags().StringVarP(&dbTarget, "db", "d", "", "Display stories in other database path")
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/aboodman/noms-gx/go/d"
 	"github.com/attic-labs/noms/go/chunks"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
@@ -98,7 +99,6 @@ func (r *Resolver) GetChunkStore(str string) (chunks.ChunkStore, error) {
 
 // Resolve string to a dataset. If a config is present,
 //  - if no db prefix is present, assume the default db
-//  - if the db prefix is an alias, replace it
 func (r *Resolver) GetDataset(str string) (datas.Database, datas.Dataset, error) {
 	sp, err := spec.ForDataset(r.verbose(str, r.ResolvePathSpec(str)))
 	if err != nil {
@@ -109,7 +109,6 @@ func (r *Resolver) GetDataset(str string) (datas.Database, datas.Dataset, error)
 
 // Resolve string to a value path. If a config is present,
 //  - if no db spec is present, assume the default db
-//  - if the db spec is an alias, replace it
 func (r *Resolver) GetPath(str string) (datas.Database, types.Value, error) {
 	sp, err := spec.ForPath(r.verbose(str, r.ResolvePathSpec(str)))
 	if err != nil {
@@ -120,4 +119,10 @@ func (r *Resolver) GetPath(str string) (datas.Database, types.Value, error) {
 
 func (r *Resolver) GetUser() UserConfig {
 	return r.config.User
+}
+
+func (r *Resolver) FindDatabase(str string) bool {
+	sp, err := spec.ForDatabase(r.verbose(str, r.ResolveDbSpec(str)))
+	d.PanicIfError(err)
+	return sp.FindDatabase()
 }
