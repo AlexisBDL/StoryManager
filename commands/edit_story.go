@@ -9,6 +9,7 @@ import (
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
+	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
@@ -22,6 +23,15 @@ var (
 func runEditStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
+
+	// Test Open
+	_, valState, _ := cfg.GetPath(ID + storyState)
+	state, err := strconv.Unquote(types.EncodedValue(valState))
+	d.PanicIfError(err)
+	if state == stateClose {
+		fmt.Printf("The story %s is close, you con't modify it\n", ID)
+		return nil
+	}
 
 	// Edit
 	resolved := cfg.ResolvePathSpec(ID) + commitStory

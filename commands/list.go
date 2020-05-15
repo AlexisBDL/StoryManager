@@ -31,17 +31,17 @@ func runListStory(cmd *cobra.Command, args []string) error {
 		lsOpen   []string
 		lsClose  []string
 		valState types.Value
-		str      string
+		state    string
 	)
 
 	for _, v := range ls {
 		_, valState, _ = cfg.GetPath(v + storyState)
-		str, err = strconv.Unquote(types.EncodedValue(valState))
+		state, err = strconv.Unquote(types.EncodedValue(valState))
 		d.PanicIfError(err)
-		if str == strOpen {
+		if state == stateOpen {
 			lsOpen = append(lsOpen, v)
 		}
-		if str == strClose {
+		if state == stateClose {
 			lsClose = append(lsClose, v)
 		}
 	}

@@ -13,4 +13,5 @@ Model of datas :
 
 The goal of this programme is to syncronize databases of stories in local machine.
 
-The StorieManager need a file ".nomsconfig" in the path of the executable. You can configure the programme with this file like default database or user.
+The StorieManager need a file ".dbconfig" in the path of the executable. You can configure the programme with this file like default database and user.
+Use the syntax of the example .dbconfig in this repository.

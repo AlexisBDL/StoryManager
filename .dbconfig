@@ -1,6 +1,6 @@
 # Default database URL to be used whenever a database is not explictly provided
 [db]
-Url = "./Stories"  # This path is relative to the location of .config
+Url = "./Stories"  # This path is relative to the location of .dbconfig
 
     [db.user]
     FirstName = "First"

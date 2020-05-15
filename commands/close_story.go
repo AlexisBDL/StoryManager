@@ -34,7 +34,7 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 
 	rootVal, basePath := SplitPath(sp)
 
-	field := []string{"State", strClose}
+	field := []string{"State", stateClose}
 
 	absPath := ApplyStructEdits(db, rootVal, basePath, field)
 
