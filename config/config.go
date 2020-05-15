@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -25,6 +26,7 @@ type UserConfig struct {
 const (
 	ConfigFile  = ".dbconfig"
 	UserDbAlias = "user"
+	ConfigDb    = "db"
 )
 
 type Configs struct {
@@ -37,7 +39,7 @@ var NoConfig = errors.New(fmt.Sprintf("no %s found", ConfigFile))
 // Find the closest directory containing .dbconfig starting
 // in cwd and then searching up ancestor tree.
 // Look first looking in cwd and then up through its ancestors
-func FindConfig() (*Config, error) {
+func FindConfig() (*Configs, error) {
 	curDir, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -61,7 +63,7 @@ func FindConfig() (*Config, error) {
 	}
 }
 
-func ReadConfig(name string) (*Config, error) {
+func ReadConfig(name string) (*Configs, error) {
 	data, err := ioutil.ReadFile(name)
 	if err != nil {
 		return nil, err
@@ -74,15 +76,7 @@ func ReadConfig(name string) (*Config, error) {
 	return qualifyPaths(name, c)
 }
 
-func NewConfig(data string) (*Configs, error) {
-	c := new(Configs)
-	if _, err := toml.Decode(string(data), &c.Conf); err != nil {
-		return nil, err
-	}
-	return c, nil
-}
-
-func qualifyPaths(configPath string, c *Configs) (*Config, error) {
+func qualifyPaths(configPath string, c *Configs) (*Configs, error) {
 	file, err := filepath.Abs(configPath)
 	if err != nil {
 		return nil, err
@@ -93,8 +87,15 @@ func qualifyPaths(configPath string, c *Configs) (*Config, error) {
 	for k, r := range c.Conf {
 		qc.Conf[k] = Config{absDbSpec(dir, r.Url), r.User}
 	}
-	res := qc.Conf["db"]
-	return &res, nil
+	return &qc, nil
+}
+
+func NewConfig(data string) (*Configs, error) {
+	c := new(Configs)
+	if _, err := toml.Decode(string(data), &c.Conf); err != nil {
+		return nil, err
+	}
+	return c, nil
 }
 
 // Replace relative directory in path part of spec with an absolute
@@ -112,4 +113,27 @@ func absDbSpec(configHome string, url string) string {
 		dbName = filepath.Join(configHome, dbName)
 	}
 	return "nbs:" + dbName
+}
+
+func (c *Configs) WriteTo(configHome string) (string, error) {
+	file := filepath.Join(configHome, ConfigFile)
+	if err := os.MkdirAll(filepath.Dir(file), os.ModePerm); err != nil {
+		return "", err
+	}
+	if err := ioutil.WriteFile(file, []byte(c.writeableString()), os.ModePerm); err != nil {
+		return "", err
+	}
+	return file, nil
+}
+
+func (c *Configs) writeableString() string {
+	var buffer bytes.Buffer
+	myConf := c.Conf["db"]
+	buffer.WriteString(fmt.Sprintf("[db]\n"))
+	buffer.WriteString(fmt.Sprintf(`Url = "%s"`+"\n", myConf.Url))
+	buffer.WriteString(fmt.Sprintf("\t" + "[db.user]\n"))
+	buffer.WriteString(fmt.Sprintf("\t"+`FirstName = "%s"`+"\n", myConf.User.FirstName))
+	buffer.WriteString(fmt.Sprintf("\t"+`LastName = "%s"`+"\n", myConf.User.LastName))
+	buffer.WriteString(fmt.Sprintf("\t"+`Fonction = "%s"`+"\n", myConf.User.Fonction))
+	return buffer.String()
 }

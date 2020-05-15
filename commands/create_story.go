@@ -29,7 +29,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	})
 
 	// Create
-	absPath := ApplyStructEdits(db, NewStory(title), nil, nil)
+	absPath := ApplyStructEdits(db, NewStory(title, cfg.GetUser().FirstName+" "+cfg.GetUser().LastName), nil, nil)
 
 	// Commits
 	value := absPath.Resolve(db)

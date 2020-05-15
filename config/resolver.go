@@ -28,7 +28,8 @@ func NewResolver() *Resolver {
 		}
 		return &Resolver{}
 	}
-	return &Resolver{c, ""}
+	res := c.Conf[ConfigDb]
+	return &Resolver{&res, ""}
 }
 
 // Print replacement if one occurred
