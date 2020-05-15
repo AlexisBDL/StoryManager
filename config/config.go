@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/BurntSushi/toml"
-	"github.com/attic-labs/noms/go/spec"
 )
 
 type Config struct {

@@ -20,6 +20,11 @@ var (
 func runListStory(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver() //config default db "Stories"
 
+	if !cfg.FindDatabase(dbTarget) {
+		fmt.Printf("Database not found at %s\n", dbTarget)
+		return nil
+	}
+
 	db, err := cfg.GetDatabase(dbTarget)
 	d.CheckError(err)
 	defer db.Close()
