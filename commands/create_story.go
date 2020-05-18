@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/AlexisBDL/StoryManager/config"
+	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
@@ -29,7 +30,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	})
 
 	// Create
-	absPath := ApplyStructEdits(db, NewStory(title, cfg.GetUser().FirstName+" "+cfg.GetUser().LastName), nil, nil)
+	absPath := util.ApplyStructEdits(db, NewStory(title, cfg.GetUser().FirstName+" "+cfg.GetUser().LastName), nil, nil)
 
 	// Commits
 	value := absPath.Resolve(db)

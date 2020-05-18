@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/AlexisBDL/StoryManager/config"
+	"github.com/AlexisBDL/StoryManager/util"
 
 	"github.com/attic-labs/noms/go/datas"
 
@@ -32,11 +33,11 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 	db := pinned.GetDatabase()
 	ds := db.GetDataset(ID)
 
-	rootVal, basePath := SplitPath(sp)
+	rootVal, basePath := util.SplitPath(sp)
 
 	field := []string{"State", stateClose}
 
-	absPath := ApplyStructEdits(db, rootVal, basePath, field)
+	absPath := util.ApplyStructEdits(db, rootVal, basePath, field)
 
 	// Commit
 	valPath := absPath.Resolve(db)

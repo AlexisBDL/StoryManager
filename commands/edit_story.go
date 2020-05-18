@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/AlexisBDL/StoryManager/config"
+	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
@@ -48,7 +49,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	db := pinned.GetDatabase()
 	ds := db.GetDataset(ID)
 
-	rootVal, basePath := SplitPath(sp)
+	rootVal, basePath := util.SplitPath(sp)
 
 	var (
 		absPath *spec.AbsolutePath
@@ -68,7 +69,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		field = append(field, "Title", editTitle)
 	}
 
-	absPath = ApplyStructEdits(db, rootVal, basePath, field)
+	absPath = util.ApplyStructEdits(db, rootVal, basePath, field)
 
 	// Commit
 	valPath := absPath.Resolve(db)
