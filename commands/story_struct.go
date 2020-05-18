@@ -6,6 +6,7 @@ import (
 
 const (
 	storyState  = ".value.State"
+	storyTitle  = ".value.Title"
 	stateOpen   = "Open"
 	stateClose  = "Close"
 	commitStory = ".value"

@@ -33,43 +33,51 @@ func runListStory(cmd *cobra.Command, args []string) error {
 	d.CheckError(err)
 	defer db.Close()
 
-	var ls []string
-	db.Datasets().IterAll(func(k, v types.Value) {
-		ls = append(ls, fmt.Sprint(k))
-	})
-
 	var (
-		lsOpen   []string
-		lsClose  []string
 		valState types.Value
 		state    string
+		valTitle types.Value
+		title    string
+		ID       string
 	)
 
-	for _, v := range ls {
-		_, valState, _ = cfg.GetPath(v + storyState)
+	ls := make(map[string]string)
+	lsOpen := make(map[string]string)
+	lsClose := make(map[string]string)
+
+	db.Datasets().IterAll(func(k, v types.Value) {
+		ID = fmt.Sprint(k)
+		_, valTitle, err = cfg.GetPath(ID + storyTitle)
+		title, err = strconv.Unquote(types.EncodedValue(valTitle))
+		d.PanicIfError(err)
+		ls[ID] = title
+	})
+
+	for k := range ls {
+		_, valState, err = cfg.GetPath(k + storyState)
 		state, err = strconv.Unquote(types.EncodedValue(valState))
 		d.PanicIfError(err)
 		if state == stateOpen {
-			lsOpen = append(lsOpen, v)
+			lsOpen[k] = ls[k]
 		}
 		if state == stateClose {
-			lsClose = append(lsClose, v)
+			lsClose[k] = ls[k]
 		}
 	}
 
 	if open {
-		for _, v := range lsOpen {
-			fmt.Println(v)
+		for k, v := range lsOpen {
+			fmt.Println(k + "\t\t" + v)
 		}
 	}
 	if close {
-		for _, v := range lsClose {
-			fmt.Println(v)
+		for k, v := range lsClose {
+			fmt.Println(k + "\t\t" + v)
 		}
 	}
 	if !close && !open {
-		for _, v := range ls {
-			fmt.Println(v)
+		for k, v := range ls {
+			fmt.Println(k + "\t\t" + v)
 		}
 	}
 
