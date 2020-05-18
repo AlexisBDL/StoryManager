@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/AlexisBDL/StoryManager/config"
+	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/spec"
@@ -22,7 +23,7 @@ func runLogStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]               //dataset or value to display history for
 	cfg := config.NewResolver() //config default db "Stories"
 
-	o := NewOpts(ID)
+	o := util.NewOpts(ID)
 
 	resolved := cfg.ResolvePathSpec(ID)
 	sp, err := spec.ForPath(resolved)
@@ -48,7 +49,7 @@ func runLogStory(cmd *cobra.Command, args []string) error {
 		d.CheckError(fmt.Errorf("%s does not reference a Commit object", path))
 	}
 
-	iter := NewCommitIterator(database, origCommit)
+	iter := util.NewCommitIterator(database, origCommit)
 	displayed := 0
 
 	bytesChan := make(chan chan []byte, parallelism)
@@ -60,9 +61,9 @@ func runLogStory(cmd *cobra.Command, args []string) error {
 			ch := make(chan []byte)
 			bytesChan <- ch
 
-			go func(ch chan []byte, node LogNode) {
+			go func(ch chan []byte, node util.LogNode) {
 				buff := &bytes.Buffer{}
-				PrintCommit(node, path, buff, database, o)
+				util.PrintCommit(node, path, buff, database, o)
 				ch <- buff.Bytes()
 			}(ch, ln)
 
