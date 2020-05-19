@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/AlexisBDL/StoryManager/config"
+	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/spec"
 	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
@@ -18,6 +18,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	title := args[1]
 	cfg := config.NewResolver() //config default db "Stories"
+	user := cfg.GetUserString()
 	db, err := cfg.GetDatabase("")
 	d.PanicIfError(err)
 	defer db.Close()
@@ -30,7 +31,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	})
 
 	// Create
-	absPath := util.ApplyStructEdits(db, NewStory(title, cfg.GetUser().FirstName+" "+cfg.GetUser().LastName), nil, nil)
+	absPath := util.ApplyStructEdits(db, NewStory(title, user), nil, nil)
 
 	// Commits
 	value := absPath.Resolve(db)
@@ -46,7 +47,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+ID, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+ID, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})

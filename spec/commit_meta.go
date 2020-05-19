@@ -28,7 +28,7 @@ var (
 // Database is used only if commitMetaKeyValuePaths are provided on the command line and values need to be resolved.
 // Date should be ISO 8601 format (see CommitMetaDateFormat), if empty the current date is used.
 // The values passed as command line arguments (if any) are merged with the values provided as function arguments.
-func CreateCommitMetaStruct(db datas.Database, date, message string, keyValueStrings map[string]string, keyValuePaths map[string]types.Value) (types.Struct, error) {
+func CreateCommitMetaStruct(db datas.Database, date, message string, author string, keyValueStrings map[string]string, keyValuePaths map[string]types.Value) (types.Struct, error) {
 	metaValues := types.StructData{}
 
 	resolvePathFunc := func(path string) (types.Value, error) {
@@ -102,5 +102,8 @@ func CreateCommitMetaStruct(db datas.Database, date, message string, keyValueStr
 	} else if commitMetaMessage != "" {
 		metaValues["message"] = types.String(commitMetaMessage)
 	}
+
+	metaValues["author"] = types.String(author)
+
 	return types.NewStruct("Meta", metaValues), nil
 }

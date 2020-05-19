@@ -117,8 +117,10 @@ func (r *Resolver) GetPath(str string) (datas.Database, types.Value, error) {
 	return sp.GetDatabase(), sp.GetValue(), nil
 }
 
-func (r *Resolver) GetUser() UserConfig {
-	return r.config.User
+func (r *Resolver) GetUserString() string {
+	user := r.config.User
+	str := fmt.Sprint(user.FirstName, " ", user.LastName, " --> ", user.Fonction)
+	return str
 }
 
 func (r *Resolver) FindDatabase(str string) (bool, error) {

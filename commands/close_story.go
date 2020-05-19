@@ -7,16 +7,18 @@ import (
 	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/AlexisBDL/StoryManager/util"
 
+	"github.com/AlexisBDL/StoryManager/spec"
+
 	"github.com/attic-labs/noms/go/datas"
 
 	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/spec"
 	"github.com/spf13/cobra"
 )
 
 func runCloseStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
+	user := cfg.GetUserString()
 
 	// Edit close
 	resolved := cfg.ResolvePathSpec(ID) + commitStory
@@ -54,7 +56,8 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", ID+" was closed", nil, nil)
+	message := ID + " was closed"
+	meta, err := spec.CreateCommitMetaStruct(db, "", message, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})

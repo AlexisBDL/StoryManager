@@ -9,9 +9,8 @@ import (
 
 func runUser(cmd *cobra.Command, args []string) error {
 	cfg := config.NewResolver()
-	user := cfg.GetUser()
 
-	fmt.Println(user.FirstName, user.LastName, user.Fonction)
+	fmt.Println(cfg.GetUserString())
 
 	return nil
 }
