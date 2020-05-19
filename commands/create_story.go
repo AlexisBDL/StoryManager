@@ -3,19 +3,28 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"math/rand"
+	"strconv"
 
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
+	"github.com/attic-labs/noms/go/hash"
 	"github.com/attic-labs/noms/go/types"
+	"github.com/attic-labs/noms/go/util/datetime"
 
 	"github.com/spf13/cobra"
 )
 
 func runCreateStory(cmd *cobra.Command, args []string) error {
-	ID := args[0]
-	title := args[1]
+	title := args[0]
+
+	r := rand.New(rand.NewSource(99))
+	data := []byte(title + datetime.Now().String()[20:28] + strconv.Itoa((r.Int())))
+	fmt.Println(data[:20])
+	ID := hash.New(data[:20]).String()
+
 	db, err := cfg.GetDatabase("")
 	d.PanicIfError(err)
 	defer db.Close()
@@ -44,7 +53,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+ID, user, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+title, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
@@ -58,7 +67,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 var createStoryCmd = &cobra.Command{
 	Use:   "create <ID> <title>",
 	Short: "Create a new story.",
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.ExactArgs(1),
 	RunE:  runCreateStory,
 }
 
