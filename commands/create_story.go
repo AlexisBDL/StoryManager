@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
@@ -17,8 +16,6 @@ import (
 func runCreateStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	title := args[1]
-	cfg := config.NewResolver() //config default db "Stories"
-	user := cfg.GetUserString()
 	db, err := cfg.GetDatabase("")
 	d.PanicIfError(err)
 	defer db.Close()

@@ -3,14 +3,12 @@ package commands
 import (
 	"fmt"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/spf13/cobra"
 )
 
 func runUser(cmd *cobra.Command, args []string) error {
-	cfg := config.NewResolver()
 
-	fmt.Println(cfg.GetUserString())
+	fmt.Println(user)
 
 	return nil
 }

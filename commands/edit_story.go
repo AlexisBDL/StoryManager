@@ -86,7 +86,6 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	user := cfg.GetUserString()
 	message := "Edit value " + change + "in story : " + ID
 	meta, err := spec.CreateCommitMetaStruct(db, "", message, user, nil, nil)
 	d.CheckErrorNoUsage(err)

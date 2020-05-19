@@ -18,7 +18,6 @@ import (
 func runCloseStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	cfg := config.NewResolver() //config default db "Stories"
-	user := cfg.GetUserString()
 
 	// Edit close
 	resolved := cfg.ResolvePathSpec(ID) + commitStory

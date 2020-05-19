@@ -4,10 +4,18 @@ package commands
 import (
 	"os"
 
+	"github.com/AlexisBDL/StoryManager/config"
+
 	"github.com/spf13/cobra"
 )
 
 const rootCommandName = "StoryManager"
+
+// Init
+var (
+	cfg  = config.NewResolver() //config default db "Stories"
+	user = cfg.GetUserString()
+)
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
