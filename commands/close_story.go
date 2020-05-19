@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/AlexisBDL/StoryManager/util"
 
 	"github.com/AlexisBDL/StoryManager/spec"
@@ -17,7 +16,6 @@ import (
 
 func runCloseStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	cfg := config.NewResolver() //config default db "Stories"
 
 	// Edit close
 	resolved := cfg.ResolvePathSpec(ID) + commitStory

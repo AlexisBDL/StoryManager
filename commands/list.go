@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/types"
 
@@ -18,7 +17,6 @@ var (
 )
 
 func runListStory(cmd *cobra.Command, args []string) error {
-	cfg := config.NewResolver() //config default db "Stories"
 
 	if dbTarget != "" {
 		find, err := cfg.FindDatabase(dbTarget)

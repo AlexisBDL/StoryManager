@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/types"
 	"github.com/attic-labs/noms/go/util/outputpager"
@@ -13,7 +12,6 @@ import (
 
 func runShowStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	cfg := config.NewResolver() //config default db "Stories"
 	db, ds, err := cfg.GetPath(ID)
 	d.CheckError(err)
 	defer db.Close()

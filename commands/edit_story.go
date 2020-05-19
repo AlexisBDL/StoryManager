@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
@@ -23,7 +22,6 @@ var (
 
 func runEditStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	cfg := config.NewResolver() //config default db "Stories"
 
 	// Test Open
 	_, valState, _ := cfg.GetPath(ID + storyState)

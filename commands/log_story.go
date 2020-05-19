@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
@@ -20,8 +19,7 @@ import (
 const parallelism = 16
 
 func runLogStory(cmd *cobra.Command, args []string) error {
-	ID := args[0]               //dataset or value to display history for
-	cfg := config.NewResolver() //config default db "Stories"
+	ID := args[0] //dataset or value to display history for
 
 	o := util.NewOpts(ID)
 
