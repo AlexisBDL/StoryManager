@@ -13,8 +13,8 @@ const rootCommandName = "StoryManager"
 
 // Init
 var (
-	cfg  = config.NewResolver() //config default db "Stories"
-	user = cfg.GetUserString()
+	cfg  *config.Resolver
+	user string
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -36,6 +36,8 @@ var RootCmd = &cobra.Command{
 }
 
 func Execute() {
+	cfg = config.NewResolver() //config default db "Stories"
+	user = cfg.GetUserString()
 	if err := RootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}

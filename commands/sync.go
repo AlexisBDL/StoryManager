@@ -5,7 +5,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/types"
@@ -17,18 +16,17 @@ import (
 )
 
 func runSyncStory(cmd *cobra.Command, args []string) error {
-	cfg := config.NewResolver()
-	title := args[0]
+	ID := args[0]
 	dest := args[1]
-	sourceStore, sourceObj, err := cfg.GetPath(title)
+	sourceStore, sourceObj, err := cfg.GetPath(ID)
 	d.CheckError(err)
 	defer sourceStore.Close()
 
 	if sourceObj == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("Object not found: %s", title))
+		d.CheckErrorNoUsage(fmt.Errorf("Story not found in my Stories: %s", ID))
 	}
 
-	sinkDB, sinkDataset, err := cfg.GetDataset(dest + "::" + title)
+	sinkDB, sinkDataset, err := cfg.GetDataset(dest + "::" + ID)
 	d.CheckError(err)
 	defer sinkDB.Close()
 
@@ -102,8 +100,8 @@ func since(start time.Time) string {
 }
 
 var syncStoryCmd = &cobra.Command{
-	Use:   "sync <title> <destination>",
-	Short: "Syncronize the story <title> with the databases <destination>.",
+	Use:   "sync <ID> <destination>",
+	Short: "Syncronize the story <ID> with the databases <destination>.",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runSyncStory,
 }

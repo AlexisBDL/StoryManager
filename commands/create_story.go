@@ -11,7 +11,6 @@ import (
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/hash"
-	"github.com/attic-labs/noms/go/types"
 	"github.com/attic-labs/noms/go/util/datetime"
 
 	"github.com/spf13/cobra"
@@ -22,19 +21,11 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 	r := rand.New(rand.NewSource(99))
 	data := []byte(title + datetime.Now().String()[20:28] + strconv.Itoa((r.Int())))
-	fmt.Println(data[:20])
 	ID := hash.New(data[:20]).String()
 
 	db, err := cfg.GetDatabase("")
 	d.PanicIfError(err)
 	defer db.Close()
-
-	// Check no duplicate story
-	db.Datasets().IterAll(func(k, v types.Value) {
-		if fmt.Sprint(k) == ID {
-			d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error, ID : %s allready exist in database", ID)))
-		}
-	})
 
 	// Create
 	absPath := util.ApplyStructEdits(db, NewStory(title, user), nil, nil)

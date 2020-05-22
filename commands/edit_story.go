@@ -25,6 +25,9 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 
 	// Test Open
 	_, valState, _ := cfg.GetPath(ID + storyState)
+	if valState == nil {
+		d.CheckErrorNoUsage(fmt.Errorf("Story %s not found in my Stories", ID))
+	}
 	state, err := strconv.Unquote(types.EncodedValue(valState))
 	d.PanicIfError(err)
 	if state == stateClose {

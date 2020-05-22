@@ -3,12 +3,14 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/AlexisBDL/StoryManager/util"
 
 	"github.com/AlexisBDL/StoryManager/spec"
 
 	"github.com/attic-labs/noms/go/datas"
+	"github.com/attic-labs/noms/go/types"
 
 	"github.com/attic-labs/noms/go/d"
 	"github.com/spf13/cobra"
@@ -16,6 +18,18 @@ import (
 
 func runCloseStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
+
+	// Test Open
+	_, valState, _ := cfg.GetPath(ID + storyState)
+	if valState == nil {
+		d.CheckErrorNoUsage(fmt.Errorf("Story %s not found in my Stories", ID))
+	}
+	state, err := strconv.Unquote(types.EncodedValue(valState))
+	d.PanicIfError(err)
+	if state == stateClose {
+		fmt.Printf("The story %s was allready closed\n", ID)
+		return nil
+	}
 
 	// Edit close
 	resolved := cfg.ResolvePathSpec(ID) + commitStory

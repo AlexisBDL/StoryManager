@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AlexisBDL/StoryManager/config"
 	"github.com/attic-labs/noms/go/d"
 	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/types"
@@ -19,21 +18,20 @@ import (
 
 // creer package util pour plus d'organisation
 func runPullStory(cmd *cobra.Command, args []string) error {
-	cfg := config.NewResolver()
-	title := args[0]
+	ID := args[0]
 	src := args[1]
-	myStore, myObj, err := cfg.GetPath(title)
+	myStore, myObj, err := cfg.GetPath(ID)
 	d.CheckError(err)
 	defer myStore.Close()
 
 	if myObj == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("Object %s not found in my Stories", title))
+		d.CheckErrorNoUsage(fmt.Errorf("Story %s not found in my Stories", ID))
 	}
 
-	dbLocal, valueLocal, err := cfg.GetPath(title + ".meta.date")
+	dbLocal, valueLocal, err := cfg.GetPath(ID + ".meta.date")
 	d.PanicIfError(err)
 	defer dbLocal.Close()
-	dbSrc, valueSrc, err := cfg.GetPath(src + "::" + title + ".meta.date")
+	dbSrc, valueSrc, err := cfg.GetPath(src + "::" + ID + ".meta.date")
 	d.PanicIfError(err)
 	defer dbSrc.Close()
 
@@ -48,10 +46,10 @@ func runPullStory(cmd *cobra.Command, args []string) error {
 	d.PanicIfError(err)
 
 	if tLocal.After(tSrc) {
-		d.CheckErrorNoUsage(fmt.Errorf("Your story %s is more recent. No changes", title))
+		d.CheckErrorNoUsage(fmt.Errorf("Your story %s is more recent. No changes", ID))
 	}
 
-	sinkDB, sinkDataset, err := cfg.GetDataset(src + "::" + title)
+	sinkDB, sinkDataset, err := cfg.GetDataset(src + "::" + ID)
 	d.CheckError(err)
 	defer sinkDB.Close()
 
@@ -114,8 +112,8 @@ func runPullStory(cmd *cobra.Command, args []string) error {
 }
 
 var pullStoryCmd = &cobra.Command{
-	Use:   "pull <title> <source>",
-	Short: "Pull the story <title> from the databases <source>.",
+	Use:   "pull <ID> <source>",
+	Short: "Pull the story <ID> from the databases <source>.",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runPullStory,
 }
