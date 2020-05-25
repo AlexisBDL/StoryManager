@@ -67,7 +67,7 @@ func runLogStory(cmd *cobra.Command, args []string) error {
 
 			displayed++
 		}
-		//close(bytesChan)
+		close(bytesChan)
 	}()
 
 	pgr := outputpager.Start()

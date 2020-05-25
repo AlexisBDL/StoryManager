@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	open     bool
-	close    bool
+	isOpen   bool
+	isClose  bool
 	dbTarget string
 )
 
@@ -63,17 +63,17 @@ func runListStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	if open {
+	if isOpen {
 		for k, v := range lsOpen {
 			fmt.Println(k + "\t\t" + v)
 		}
 	}
-	if close {
+	if isClose {
 		for k, v := range lsClose {
 			fmt.Println(k + "\t\t" + v)
 		}
 	}
-	if !close && !open {
+	if !isClose && !isOpen {
 		for k, v := range ls {
 			fmt.Println(k + "\t\t" + v)
 		}
@@ -93,10 +93,10 @@ var listStoryCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(listStoryCmd)
 
-	listStoryCmd.Flags().BoolVarP(&open, "open", "o", false, "Display open stories")
+	listStoryCmd.Flags().BoolVarP(&isOpen, "open", "o", false, "Display open stories")
 	listStoryCmd.Flags().Lookup("open").NoOptDefVal = "true"
 
-	listStoryCmd.Flags().BoolVarP(&close, "close", "c", false, "Display close stories")
+	listStoryCmd.Flags().BoolVarP(&isClose, "close", "c", false, "Display close stories")
 	listStoryCmd.Flags().Lookup("close").NoOptDefVal = "true"
 
 	listStoryCmd.Flags().StringVarP(&dbTarget, "db", "d", "", "Display stories in other database path")
