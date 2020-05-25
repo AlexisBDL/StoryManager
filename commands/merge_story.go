@@ -20,6 +20,7 @@ var (
 	datasetRe = regexp.MustCompile("^" + datas.DatasetRe.String() + "$")
 )
 
+// Fusion de branch aillant le même parent
 func runMergeStory(cmd *cobra.Command, args []string) error {
 	db, err := cfg.GetDatabase("")
 	d.CheckError(err)
