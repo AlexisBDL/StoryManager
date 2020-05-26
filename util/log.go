@@ -30,12 +30,12 @@ type opts struct {
 	tz         *time.Location
 }
 
-func NewOpts(title string) opts {
+func NewOpts(title string, graph bool) opts {
 	var o opts
 	o.maxLines = -1     //max number of lines to show per commit (-1 for all lines), need to be Short; def = 9
 	o.maxCommits = 0    //max number of commits to display (0 for all commits); def = 0
 	o.oneline = false   //show a summary of each commit on a single line
-	o.showGraph = false //show ascii-based commit hierarchy on left side of output
+	o.showGraph = graph //show ascii-based commit hierarchy on left side of output
 	o.showValue = false //show commit value rather than diff information
 	color := 1          //set to 1 to force color on, 0 to force off; def = -1
 	o.path = title

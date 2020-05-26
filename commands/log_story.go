@@ -18,10 +18,12 @@ import (
 
 const parallelism = 16
 
+var graph bool
+
 func runLogStory(cmd *cobra.Command, args []string) error {
 	ID := args[0] //dataset or value to display history for
 
-	o := util.NewOpts(ID)
+	o := util.NewOpts(ID, graph)
 
 	resolved := cfg.ResolvePathSpec(ID)
 	sp, err := spec.ForPath(resolved)
@@ -97,4 +99,7 @@ var logStoryCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(logStoryCmd)
+
+	logStoryCmd.Flags().BoolVarP(&graph, "graph", "g", false, "Display graphe logs")
+	logStoryCmd.Flags().Lookup("graph").NoOptDefVal = "true"
 }

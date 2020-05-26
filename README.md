@@ -15,3 +15,5 @@ The goal of this programme is to syncronize databases of stories in local machin
 
 The StorieManager need a file ".dbconfig" in the path of the executable. You can configure the programme with this file like default database and user.
 Use the syntax of the example .dbconfig in this repository.
+
+To run tests, use Robot Framework and run tests.robot
