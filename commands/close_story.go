@@ -85,7 +85,7 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 }
 
 var closeStoryCmd = &cobra.Command{
-	Use:   "close",
+	Use:   "close <ID>",
 	Short: "Close a story",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runCloseStory,
