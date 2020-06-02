@@ -44,13 +44,13 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story : "+title, user, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story "+title+" with ID "+ID, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
-	fmt.Printf("%s was created\n", ID)
+	fmt.Printf("%s was created\nID : %s\n", title, ID)
 
 	return nil
 }

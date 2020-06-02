@@ -87,7 +87,12 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	message := "Edit value " + change + "in story : " + ID
+	_, valTitle, err := cfg.GetPath(ID + storyTitle)
+	d.PanicIfError(err)
+	title, err := strconv.Unquote(types.EncodedValue(valTitle))
+	d.PanicIfError(err)
+
+	message := "Edit value " + change + " in story " + title + " with ID " + ID
 	meta, err := spec.CreateCommitMetaStruct(db, "", message, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
@@ -99,7 +104,7 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	} else {
 		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
 	}
-	fmt.Printf("%s edited\n", ID)
+	fmt.Printf("%s edited\nID : %s\n", title, ID)
 
 	return nil
 }

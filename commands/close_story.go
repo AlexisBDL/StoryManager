@@ -67,7 +67,12 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	message := ID + " was closed"
+	_, valTitle, err := cfg.GetPath(ID + storyTitle)
+	d.PanicIfError(err)
+	title, err := strconv.Unquote(types.EncodedValue(valTitle))
+	d.PanicIfError(err)
+
+	message := "Story " + title + " with ID " + ID + " was closed"
 	meta, err := spec.CreateCommitMetaStruct(db, "", message, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
@@ -79,7 +84,7 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 	} else {
 		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
 	}
-	fmt.Printf("%s closed\n", ID)
+	fmt.Printf("%s closed\nID : %s\n", title, ID)
 
 	return nil
 }
