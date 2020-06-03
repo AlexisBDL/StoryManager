@@ -1,15 +1,11 @@
 package commands
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 
-	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/datas"
-	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
@@ -23,88 +19,42 @@ var (
 func runEditStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 
-	// Test Open
-	_, valState, _ := cfg.GetPath(ID + storyState)
-	if valState == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("Story %s not found in my Stories", ID))
-	}
-	state, err := strconv.Unquote(types.EncodedValue(valState))
+	db, ds, err := cfg.GetDataset(ID)
 	d.PanicIfError(err)
-	if state == stateClose {
-		fmt.Printf("The story %s is close, you con't modify it\n", ID)
+	defer db.Close()
+
+	// Test Open
+	if isOpenStory(ID) {
+		fmt.Printf("The story %s is close, you can't modify it\n", ID)
 		return nil
 	}
 
 	// Edit
-	resolved := cfg.ResolvePathSpec(ID) + commitStory
-	sp, err := spec.ForPath(resolved)
-	d.PanicIfError(err)
-	defer sp.Close()
-
-	pinned, ok := sp.Pin()
-	if !ok {
-		fmt.Printf("Cannot resolve spec: %s\n", ID)
-		return nil
-	}
-
-	db := pinned.GetDatabase()
-	ds := db.GetDataset(ID)
-
-	rootVal, basePath := util.SplitPath(sp)
-
 	var (
-		absPath *spec.AbsolutePath
-		change  string
-		field   []string
+		change string
+		fields []string
 	)
 	if editDescription != "" {
 		change += "description "
-		field = append(field, "Description", editDescription)
+		fields = append(fields, "Description", editDescription)
 	}
 	if editEffort != -1 {
 		change += "effort "
-		field = append(field, "Effort", strconv.Itoa(editEffort))
+		fields = append(fields, "Effort", strconv.Itoa(editEffort))
 	}
 	if editTitle != "" {
 		change += "title "
-		field = append(field, "Title", editTitle)
+		fields = append(fields, "Title", editTitle)
 	}
 
-	absPath = util.ApplyStructEdits(db, rootVal, basePath, field)
+	resolved := cfg.ResolvePathSpec(ID) + commitStory
+	absPath := util.StoryEdit(db, resolved, fields)
 
 	// Commit
-	valPath := absPath.Resolve(db)
-	if valPath == nil {
-		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", absPath.String())))
-	}
+	title := getTitle(ID)
+	msg := "Edit value " + change + "in story " + title + " with ID " + ID
 
-	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
-	if oldCommitExists {
-		head := ds.HeadValue()
-		if head.Hash() == valPath.Hash() {
-			fmt.Printf("Commit aborted - allow-dupe is set to off and this commit would create a duplicate\n")
-			return nil
-		}
-	}
-
-	_, valTitle, err := cfg.GetPath(ID + storyTitle)
-	d.PanicIfError(err)
-	title, err := strconv.Unquote(types.EncodedValue(valTitle))
-	d.PanicIfError(err)
-
-	message := "Edit value " + change + " in story " + title + " with ID " + ID
-	meta, err := spec.CreateCommitMetaStruct(db, "", message, user, nil, nil)
-	d.CheckErrorNoUsage(err)
-
-	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
-	d.CheckErrorNoUsage(err)
-
-	if oldCommitExists {
-		fmt.Printf("New head #%v (was #%v)\n", ds.HeadRef().TargetHash().String(), oldCommitRef.TargetHash().String())
-	} else {
-		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
-	}
-	fmt.Printf("%s edited\nID : %s\n", title, ID)
+	util.Commit(db, ds, absPath, ID, msg, user, title)
 
 	return nil
 }

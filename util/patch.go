@@ -12,6 +12,26 @@ import (
 	"github.com/attic-labs/noms/go/types"
 )
 
+func ApplyMapEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) *spec.AbsolutePath {
+	if len(args)%2 != 0 {
+		d.CheckError(fmt.Errorf("Must be an even number of key/value pairs"))
+	}
+	patch := diff.Patch{}
+	for i := 0; i < len(args); i += 2 {
+		kp := parseKeyPart(args, i)
+		vv, err := argumentToValue(args[i+1], db)
+		if err != nil {
+			d.CheckError(fmt.Errorf("Invalid value: %s at position %d: %s", args[i+1], i+1, err))
+		}
+		patch = append(patch, diff.Difference{
+			Path:       append(basePath, kp),
+			ChangeType: types.DiffChangeModified,
+			NewValue:   vv,
+		})
+	}
+	return appplyPatch(db, rootVal, basePath, patch)
+}
+
 func ApplyStructEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) *spec.AbsolutePath {
 	patch := diff.Patch{}
 	for i := 0; i < len(args); i += 2 {
@@ -96,5 +116,21 @@ func SplitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
 		return
 	}
 	basePath = sp.Path.Path
+	return
+}
+
+func parseKeyPart(args []string, i int) (res types.PathPart) {
+	idx, h, rem, err := types.ParsePathIndex(args[i])
+	if rem != "" {
+		d.CheckError(fmt.Errorf("Invalid key: %s at position %d", args[i], i))
+	}
+	if err != nil {
+		d.CheckError(fmt.Errorf("Invalid key: %s at position %d: %s", args[i], i, err))
+	}
+	if idx != nil {
+		res = types.NewIndexPath(idx)
+	} else {
+		res = types.NewHashIndexPath(h)
+	}
 	return
 }

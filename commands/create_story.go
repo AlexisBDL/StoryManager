@@ -1,15 +1,11 @@
 package commands
 
 import (
-	"errors"
-	"fmt"
 	"math/rand"
 	"strconv"
 
-	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/datas"
 	"github.com/attic-labs/noms/go/hash"
 	"github.com/attic-labs/noms/go/util/datetime"
 
@@ -28,29 +24,13 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	defer db.Close()
 
 	// Create
-	absPath := util.ApplyStructEdits(db, NewStory(title, user), nil, nil)
+	absPath := util.ApplyStructEdits(db, newStory(title, user, db), nil, nil)
 
 	// Commits
-	value := absPath.Resolve(db)
-	if value == nil {
-		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value: %s", absPath.String())))
-	}
-
+	msg := "Create new story " + title + " with ID " + ID
 	ds := db.GetDataset(ID)
 
-	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
-	if oldCommitExists {
-		fmt.Printf("Create aborted - %s allready exist (is #%s)\n", ID, oldCommitRef.TargetHash().String())
-		return nil
-	}
-
-	meta, err := spec.CreateCommitMetaStruct(db, "", "Create new story "+title+" with ID "+ID, user, nil, nil)
-	d.CheckErrorNoUsage(err)
-
-	ds, err = db.Commit(ds, value, datas.CommitOptions{Meta: meta})
-	d.CheckErrorNoUsage(err)
-
-	fmt.Printf("%s was created\nID : %s\n", title, ID)
+	util.Commit(db, ds, absPath, ID, msg, user, title)
 
 	return nil
 }
