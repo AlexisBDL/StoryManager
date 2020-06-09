@@ -1,8 +1,9 @@
 package commands
 
 import (
+	"fmt"
 	"math/rand"
-	"strconv"
+	"time"
 
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
@@ -12,11 +13,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func randomString(l int) string {
+	bytes := make([]byte, l)
+	for i := 0; i < l; i++ {
+		bytes[i] = byte(rand.Intn(99))
+	}
+	return string(bytes)
+}
+
 func runCreateStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
 
-	r := rand.New(rand.NewSource(99))
-	data := []byte(title + datetime.Now().String()[20:28] + strconv.Itoa((r.Int())))
+	if 4 < len(title) {
+		d.CheckErrorNoUsage(fmt.Errorf("Title of story need to be more long than 4 characters"))
+	}
+
+	rand.Seed(time.Now().UTC().UnixNano())
+	data := []byte(title[:4] + datetime.Now().String()[20:28] + randomString(10))
 	ID := hash.New(data[:20]).String()
 
 	db, err := cfg.GetDatabase("")

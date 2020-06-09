@@ -98,7 +98,7 @@ func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID string,
 		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value path")))
 	}
 
-	oldCommitRef, oldCommitExists := ds.MaybeHeadRef()
+	_, oldCommitExists := ds.MaybeHeadRef()
 	if oldCommitExists {
 		head := ds.HeadValue()
 		if head.Hash() == valPath.Hash() {
@@ -112,10 +112,5 @@ func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID string,
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
-	if oldCommitExists {
-		fmt.Printf("New head #%v (was #%v)\n", ds.HeadRef().TargetHash().String(), oldCommitRef.TargetHash().String())
-	} else {
-		fmt.Printf("New head #%v\n", ds.HeadRef().TargetHash().String())
-	}
 	fmt.Printf("%s edited\nID : %s\n", title, ID)
 }
