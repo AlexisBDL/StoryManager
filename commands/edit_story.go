@@ -53,8 +53,9 @@ func runEditStory(cmd *cobra.Command, args []string) error {
 	// Commit
 	title := getTitle(ID)
 	msg := "Edit value " + change + "in story " + title + " with ID " + ID
+	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, absPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msg, user, title)
 
 	return nil
 }

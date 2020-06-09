@@ -12,20 +12,20 @@ import (
 	"github.com/attic-labs/noms/go/types"
 )
 
-func ApplyMapEdits(db datas.Database, rootVal types.Value, basePath types.Path, args []string) *spec.AbsolutePath {
-	if len(args)%2 != 0 {
-		d.CheckError(fmt.Errorf("Must be an even number of key/value pairs"))
+func applyListInserts(sp spec.Spec, rootVal types.Value, basePath types.Path, pos uint64, args []string) *spec.AbsolutePath {
+	if rootVal == nil {
+		d.CheckErrorNoUsage(fmt.Errorf("No value at: %s", sp.String()))
 	}
+	db := sp.GetDatabase()
 	patch := diff.Patch{}
-	for i := 0; i < len(args); i += 2 {
-		kp := parseKeyPart(args, i)
-		vv, err := argumentToValue(args[i+1], db)
+	for i := 0; i < len(args); i++ {
+		vv, err := argumentToValue(args[i], db)
 		if err != nil {
-			d.CheckError(fmt.Errorf("Invalid value: %s at position %d: %s", args[i+1], i+1, err))
+			d.CheckError(fmt.Errorf("Invalid value: %s at position %d: %s", args[i], i, err))
 		}
 		patch = append(patch, diff.Difference{
-			Path:       append(basePath, kp),
-			ChangeType: types.DiffChangeModified,
+			Path:       append(basePath, types.NewIndexPath(types.Number(pos+uint64(i)))),
+			ChangeType: types.DiffChangeAdded,
 			NewValue:   vv,
 		})
 	}
@@ -106,7 +106,7 @@ func argumentToValue(arg string, db datas.Database) (types.Value, error) {
 	return types.String(arg), nil
 }
 
-func SplitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
+func splitPath(sp spec.Spec) (rootVal types.Value, basePath types.Path) {
 	db := sp.GetDatabase()
 	rootPath := sp.Path
 	rootPath.Path = types.Path{}

@@ -29,8 +29,9 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	// Commits
 	msg := "Create new story " + title + " with ID " + ID
 	ds := db.GetDataset(ID)
+	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, absPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msg, user, title)
 
 	return nil
 }

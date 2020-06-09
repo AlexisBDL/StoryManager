@@ -14,8 +14,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func runAddTaskStory(cmd *cobra.Command, args []string) error {
+var (
+	editGoal  string
+	editMaker string
+	editState string
+)
+
+func runEditTaskStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
+	IDT := args[1]
+
+	IDX, err := strconv.Atoi(IDT)
+	d.PanicIfError(err)
 
 	db, ds, err := cfg.GetDataset(ID)
 	d.PanicIfError(err)
@@ -35,15 +45,38 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 
 	// Edit
 	var (
-		fieldsT []string
+		change string
+		fields []string
+	)
+	if editGoal != "" {
+		change += "goal "
+		fields = append(fields, "Goal", editGoal)
+	}
+	if editMaker != "" {
+		change += "maker "
+		fields = append(fields, "Maker", editMaker)
+	}
+	if editState != "" {
+		change += "state "
+		fields = append(fields, "State", editState)
+	}
+
+	var (
+		fieldsList []string
 	)
 
-	fieldsT = append(fieldsT, "1", "name")
-	resolved := cfg.ResolvePathSpec(ID) + storyTasks
-	absPathT := util.MapEdit(db, resolved, fieldsT)
+	resolvedList := cfg.ResolvePathSpec(ID) + storyTasks
+	absPathTask := util.ApplyStructEdits(db, util.ListGet(resolvedList, uint64(IDX)), nil, fields)
 
-	absPath, err := spec.NewAbsolutePath("#" + absPathT.Hash.String() + ".value")
+	fieldsList = append(fieldsList, "@#"+absPathTask.Hash.String())
+	absPathDelT := util.ListDel(db, resolvedList, IDX)
+	resolvedListAfterDel := cfg.ResolvePathSpec(absPathDelT.String())
+	absPathInsT := util.ListInsert(db, resolvedListAfterDel, IDX, fieldsList)
+
+	absPath, err := spec.NewAbsolutePath("#" + absPathInsT.Hash.String() + ".value")
 	d.CheckError(err)
+
+	absPathTask = util.ApplyStructEdits(db, util.ListGet(resolvedList, uint64(IDX)), nil, fields)
 
 	// Commit
 	valPath := absPath.Resolve(db)
@@ -82,13 +115,23 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-var addTaskStoryCmd = &cobra.Command{
-	Use:   "add <ID>",
-	Short: "Add a task in story.",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runAddTaskStory,
+var editTaskStoryCmd = &cobra.Command{
+	Use:   "Tedit <ID> <IDTask>",
+	Short: "Edit a task in story.",
+	Args:  cobra.ExactArgs(2),
+	RunE:  runEditTaskStory,
 }
 
 func init() {
-	storyCmd.AddCommand(addTaskStoryCmd)
+	storyCmd.AddCommand(editTaskStoryCmd)
+
+	editTaskStoryCmd.Flags().StringVarP(&editGoal, "goal", "g", "",
+		"Provide a goal of a task, use \"\" to add more than one word",
+	)
+	editTaskStoryCmd.Flags().StringVarP(&editMaker, "maker", "m", "",
+		"Change the maker of the task",
+	)
+	editTaskStoryCmd.Flags().StringVarP(&editState, "state", "s", "",
+		"Change the state of the task",
+	)
 }

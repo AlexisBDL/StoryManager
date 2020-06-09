@@ -26,9 +26,20 @@ func newStory(title string, author string, db datas.Database) types.Struct {
 	fields["Effort"] = types.Number(0)
 	fields["State"] = types.String(stateOpen)
 	fields["Author"] = types.String(author)
-	fields["Tasks"] = types.NewMap(db)
+	fields["Tasks"] = types.NewList(db)
 
 	return types.NewStruct("Story", fields)
+}
+
+func newTask(goal string, maker string, it uint64) types.Struct {
+	fields := types.StructData{}
+
+	fields["Goal"] = types.String(goal)
+	fields["Maker"] = types.String(maker)
+	fields["State"] = types.String("")
+	fields["ID"] = types.Number(it)
+
+	return types.NewStruct("Task", fields)
 }
 
 func getTitle(ID string) string {
