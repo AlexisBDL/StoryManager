@@ -12,16 +12,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func runAddTaskStory(cmd *cobra.Command, args []string) error {
+func runDelTaskStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	goal := args[1]
-	maker := ""
+	IDT := args[1]
 
-	if len(args) == 2 {
-		maker = user
-	} else {
-		maker = args[2]
-	}
+	IDX, err := strconv.Atoi(IDT)
+	d.PanicIfError(err)
 
 	db, ds, err := cfg.GetDataset(ID)
 	d.PanicIfError(err)
@@ -40,24 +36,15 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 	}
 
 	// Edit
-	var (
-		fieldsList []string
-	)
-
 	resolvedList := cfg.ResolvePathSpec(ID) + storyTasks
-	absPathTask := util.ApplyStructEdits(db, newTask(goal, maker, util.ListLen(resolvedList)), nil, nil)
+	absPathDelT := util.ListDel(db, resolvedList, IDX)
 
-	fieldsList = append(fieldsList, "@#"+absPathTask.Hash.String())
-	absPathList := util.ListAppend(resolvedList, fieldsList)
-
-	absPath, err := spec.NewAbsolutePath("#" + absPathList.Hash.String() + ".value")
+	absPath, err := spec.NewAbsolutePath("#" + absPathDelT.Hash.String() + ".value")
 	d.CheckError(err)
-
-	absPathTask = util.ApplyStructEdits(db, newTask(goal, maker, util.ListLen(resolvedList)), nil, nil)
 
 	// Commit
 	title := getTitle(ID)
-	msg := "Add task " + goal + " on story ID " + ID
+	msg := "Del task " + IDT + " on story ID " + ID
 	valPath := absPath.Resolve(db)
 
 	util.Commit(db, ds, valPath, ID, msg, user, title)
@@ -65,13 +52,13 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-var addTaskStoryCmd = &cobra.Command{
-	Use:   "Tadd <ID> <goal> <maker>",
-	Short: "Add a task in story ID.",
-	Args:  cobra.MinimumNArgs(2),
-	RunE:  runAddTaskStory,
+var delTaskStoryCmd = &cobra.Command{
+	Use:   "Tdel <ID> <IDTask>",
+	Short: "Del a task IDTask in story ID.",
+	Args:  cobra.ExactArgs(2),
+	RunE:  runDelTaskStory,
 }
 
 func init() {
-	storyCmd.AddCommand(addTaskStoryCmd)
+	storyCmd.AddCommand(delTaskStoryCmd)
 }
