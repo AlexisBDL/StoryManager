@@ -74,7 +74,7 @@ func runEditTaskStory(cmd *cobra.Command, args []string) error {
 	absPath, err := spec.NewAbsolutePath("#" + absPathInsT.Hash.String() + ".value")
 	d.CheckError(err)
 
-	absPathTask = util.ApplyStructEdits(db, util.ListGet(resolvedList, uint64(IDX)), nil, fields)
+	absPathTask = util.ApplyStructEdits(db, util.ListGet(resolvedList, uint64(IDX)), nil, fields) //Remake -> Flush
 
 	// Commit
 	title := getTitle(ID)

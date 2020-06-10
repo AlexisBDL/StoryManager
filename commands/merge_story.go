@@ -42,7 +42,7 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 
 var mergeStoryCmd = &cobra.Command{
 	Use:   "merge <ID1> <ID2> ",
-	Short: "Edit a field of story.",
+	Short: "Merge two stories that have similar ref.",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runMergeStory,
 }

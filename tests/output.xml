@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot rpa="false" generated="20200529 11:46:43.363" generator="Robot 3.2.1 (Python 2.7.18rc1 on linux2)">
+<robot rpa="false" generated="20200610 10:38:49.269" generator="Robot 3.2.1 (Python 2.7.18rc1 on linux2)">
 <suite source="/home/alexis/Documents/Thales/StoryManager/tests/tests.robot" id="s1" name="Tests">
 <test id="s1-t1" name="Create story">
 <kw name="Run" library="OperatingSystem">
@@ -10,58 +10,54 @@
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.390" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.402" level="INFO">${stdout} = ehin6t1j74q30e1h6oqj4d1j64o3ed1j was created</msg>
-<status status="PASS" endtime="20200529 11:46:43.402" starttime="20200529 11:46:43.390"></status>
+<msg timestamp="20200610 10:38:49.291" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.303" level="INFO">${stdout} = test edited
+ID : ehin6t1i74q3gd9h6gs32iq6bkmi4dqm</msg>
+<status status="PASS" endtime="20200610 10:38:49.303" starttime="20200610 10:38:49.291"></status>
 </kw>
-<kw name="Should Contain" library="BuiltIn">
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
-<arguments>
-<arg>${stdout}</arg>
-<arg>was created</arg>
-</arguments>
-<status status="PASS" endtime="20200529 11:46:43.402" starttime="20200529 11:46:43.402"></status>
-</kw>
-<kw name="Get Substring" library="String">
-<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
 <arguments>
 <arg>${stdout}</arg>
 <arg>0</arg>
-<arg>-12</arg>
+</arguments>
+<assign>
+<var>${title}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.303" level="INFO">${title} = test edited</msg>
+<status status="PASS" endtime="20200610 10:38:49.303" starttime="20200610 10:38:49.303"></status>
+</kw>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
+<arguments>
+<arg>${stdout}</arg>
+<arg>1</arg>
 </arguments>
 <assign>
 <var>${id}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.403" level="INFO">${id} = ehin6t1j74q30e1h6oqj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.403" starttime="20200529 11:46:43.402"></status>
+<msg timestamp="20200610 10:38:49.304" level="INFO">${id} = ID : ehin6t1i74q3gd9h6gs32iq6bkmi4dqm</msg>
+<status status="PASS" endtime="20200610 10:38:49.304" starttime="20200610 10:38:49.303"></status>
 </kw>
-<kw name="Run" library="OperatingSystem">
-<doc>Runs the given command in the system and returns the output.</doc>
-<arguments>
-<arg>./StoryManager list</arg>
-</arguments>
-<assign>
-<var>${stdout}</var>
-</assign>
-<msg timestamp="20200529 11:46:43.403" level="INFO">Running command './StoryManager list 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.408" level="INFO">${stdout} = ehin6t1j74q30e1h6oqj4d1j64o3ed1j		test</msg>
-<status status="PASS" endtime="20200529 11:46:43.408" starttime="20200529 11:46:43.403"></status>
-</kw>
-<kw name="Log" library="BuiltIn">
-<doc>Logs the given message with the given level.</doc>
+<kw name="Get Substring" library="String">
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
 <arguments>
 <arg>${id}</arg>
+<arg>5</arg>
 </arguments>
-<msg timestamp="20200529 11:46:43.409" level="INFO">ehin6t1j74q30e1h6oqj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.409" starttime="20200529 11:46:43.409"></status>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.304" level="INFO">${id} = ehin6t1i74q3gd9h6gs32iq6bkmi4dqm</msg>
+<status status="PASS" endtime="20200610 10:38:49.304" starttime="20200610 10:38:49.304"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>${id}</arg>
+<arg>test</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.409" starttime="20200529 11:46:43.409"></status>
+<status status="PASS" endtime="20200610 10:38:49.304" starttime="20200610 10:38:49.304"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -71,17 +67,15 @@
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.410" level="INFO">Running command './StoryManager story show ehin6t1j74q30e1h6oqj4d1j64o3ed1j 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.414" level="INFO">${stdout} = struct Commit {
+<msg timestamp="20200610 10:38:49.305" level="INFO">Running command './StoryManager story show ehin6t1i74q3gd9h6gs32iq6bkmi4dqm 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.310" level="INFO">${stdout} = struct Commit {
   meta: struct Meta {
     author: "Alexis Bredel --&gt; PO",
-    date: "2020-05-29T09:46:43Z",
-    message: "Create new story : test",
+    date: "2020-06-10T08:38:49Z",
+    message: "Create new story test with ID ehin6t1i74q3gd9h6gs32iq6bkmi4dqm",
   },
-  parents: set {},
-  value: struct Story {
-    ...</msg>
-<status status="PASS" endtime="20200529 11:46:43.415" starttime="20200529 11:46:43.409"></status>
+  parent...</msg>
+<status status="PASS" endtime="20200610 10:38:49.310" starttime="20200610 10:38:49.305"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -89,7 +83,7 @@
 <arg>${stdout}</arg>
 <arg>value: struct Story {</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.415" starttime="20200529 11:46:43.415"></status>
+<status status="PASS" endtime="20200610 10:38:49.310" starttime="20200610 10:38:49.310"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -97,7 +91,7 @@
 <arg>${stdout}</arg>
 <arg>Author: "Alexis Bredel --&gt; PO",</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.415" starttime="20200529 11:46:43.415"></status>
+<status status="PASS" endtime="20200610 10:38:49.310" starttime="20200610 10:38:49.310"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -105,7 +99,7 @@
 <arg>${stdout}</arg>
 <arg>Description: "",</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.416" starttime="20200529 11:46:43.415"></status>
+<status status="PASS" endtime="20200610 10:38:49.311" starttime="20200610 10:38:49.311"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -113,7 +107,7 @@
 <arg>${stdout}</arg>
 <arg>Effort: 0,</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.416" starttime="20200529 11:46:43.416"></status>
+<status status="PASS" endtime="20200610 10:38:49.311" starttime="20200610 10:38:49.311"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -121,7 +115,7 @@
 <arg>${stdout}</arg>
 <arg>State: "Open",</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.416" starttime="20200529 11:46:43.416"></status>
+<status status="PASS" endtime="20200610 10:38:49.311" starttime="20200610 10:38:49.311"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
@@ -129,9 +123,17 @@
 <arg>${stdout}</arg>
 <arg>Title: "test",</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.416" starttime="20200529 11:46:43.416"></status>
+<status status="PASS" endtime="20200610 10:38:49.312" starttime="20200610 10:38:49.311"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.417" critical="yes" starttime="20200529 11:46:43.390"></status>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${stdout}</arg>
+<arg>Tasks: [],</arg>
+</arguments>
+<status status="PASS" endtime="20200610 10:38:49.312" starttime="20200610 10:38:49.312"></status>
+</kw>
+<status status="PASS" endtime="20200610 10:38:49.312" critical="yes" starttime="20200610 10:38:49.291"></status>
 </test>
 <test id="s1-t2" name="Edit story effort">
 <kw name="Run" library="OperatingSystem">
@@ -142,30 +144,42 @@
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.417" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.423" level="INFO">${stdout} = ehin6t1k68oj0e9m64qj4d1j64o3ed1j was created</msg>
-<status status="PASS" endtime="20200529 11:46:43.423" starttime="20200529 11:46:43.417"></status>
+<msg timestamp="20200610 10:38:49.313" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.319" level="INFO">${stdout} = test edited
+ID : ehin6t1j64r36dpo6cpkslqr2cv16i91</msg>
+<status status="PASS" endtime="20200610 10:38:49.319" starttime="20200610 10:38:49.313"></status>
 </kw>
 <kw name="Should Contain" library="BuiltIn">
 <doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>was created</arg>
+<arg>test edited</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.424" starttime="20200529 11:46:43.424"></status>
+<status status="PASS" endtime="20200610 10:38:49.319" starttime="20200610 10:38:49.319"></status>
 </kw>
-<kw name="Get Substring" library="String">
-<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>0</arg>
-<arg>-12</arg>
+<arg>1</arg>
 </arguments>
 <assign>
 <var>${id}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.424" level="INFO">${id} = ehin6t1k68oj0e9m64qj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.424" starttime="20200529 11:46:43.424"></status>
+<msg timestamp="20200610 10:38:49.320" level="INFO">${id} = ID : ehin6t1j64r36dpo6cpkslqr2cv16i91</msg>
+<status status="PASS" endtime="20200610 10:38:49.320" starttime="20200610 10:38:49.319"></status>
+</kw>
+<kw name="Get Substring" library="String">
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<arguments>
+<arg>${id}</arg>
+<arg>5</arg>
+</arguments>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.320" level="INFO">${id} = ehin6t1j64r36dpo6cpkslqr2cv16i91</msg>
+<status status="PASS" endtime="20200610 10:38:49.320" starttime="20200610 10:38:49.320"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -175,9 +189,9 @@
 <assign>
 <var>${effort}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.425" level="INFO">Running command './StoryManager story show ehin6t1k68oj0e9m64qj4d1j64o3ed1j.value.Effort 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.430" level="INFO">${effort} = 0</msg>
-<status status="PASS" endtime="20200529 11:46:43.430" starttime="20200529 11:46:43.424"></status>
+<msg timestamp="20200610 10:38:49.320" level="INFO">Running command './StoryManager story show ehin6t1j64r36dpo6cpkslqr2cv16i91.value.Effort 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.325" level="INFO">${effort} = 0</msg>
+<status status="PASS" endtime="20200610 10:38:49.325" starttime="20200610 10:38:49.320"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -185,7 +199,7 @@
 <arg>${effort}</arg>
 <arg>0</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.430" starttime="20200529 11:46:43.430"></status>
+<status status="PASS" endtime="20200610 10:38:49.326" starttime="20200610 10:38:49.326"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -195,10 +209,10 @@
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.431" level="INFO">Running command './StoryManager story edit ehin6t1k68oj0e9m64qj4d1j64o3ed1j -e 5 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.439" level="INFO">${stdout} = New head #5lls2cimtaidn8s91ftkhhutsmpsmdls (was #vltc08hm8nupti7qtm3b8v0eh8sc8k6p)
-ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
-<status status="PASS" endtime="20200529 11:46:43.439" starttime="20200529 11:46:43.430"></status>
+<msg timestamp="20200610 10:38:49.326" level="INFO">Running command './StoryManager story edit ehin6t1j64r36dpo6cpkslqr2cv16i91 -e 5 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.333" level="INFO">${stdout} = test edited
+ID : ehin6t1j64r36dpo6cpkslqr2cv16i91</msg>
+<status status="PASS" endtime="20200610 10:38:49.333" starttime="20200610 10:38:49.326"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -208,9 +222,9 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${effort}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.440" level="INFO">Running command './StoryManager story show ehin6t1k68oj0e9m64qj4d1j64o3ed1j.value.Effort 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.445" level="INFO">${effort} = 5</msg>
-<status status="PASS" endtime="20200529 11:46:43.445" starttime="20200529 11:46:43.440"></status>
+<msg timestamp="20200610 10:38:49.334" level="INFO">Running command './StoryManager story show ehin6t1j64r36dpo6cpkslqr2cv16i91.value.Effort 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.338" level="INFO">${effort} = 5</msg>
+<status status="PASS" endtime="20200610 10:38:49.338" starttime="20200610 10:38:49.333"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -218,9 +232,9 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <arg>${effort}</arg>
 <arg>5</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.446" starttime="20200529 11:46:43.446"></status>
+<status status="PASS" endtime="20200610 10:38:49.338" starttime="20200610 10:38:49.338"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.446" critical="yes" starttime="20200529 11:46:43.417"></status>
+<status status="PASS" endtime="20200610 10:38:49.338" critical="yes" starttime="20200610 10:38:49.312"></status>
 </test>
 <test id="s1-t3" name="Edit story description">
 <kw name="Run" library="OperatingSystem">
@@ -231,30 +245,34 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.447" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.453" level="INFO">${stdout} = ehin6t1k6ko3ce9p60qj4d1j64o3ed1j was created</msg>
-<status status="PASS" endtime="20200529 11:46:43.453" starttime="20200529 11:46:43.447"></status>
+<msg timestamp="20200610 10:38:49.339" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.345" level="INFO">${stdout} = test edited
+ID : ehin6t1j6gp3ccpm64qj8cot5s1ju9h5</msg>
+<status status="PASS" endtime="20200610 10:38:49.345" starttime="20200610 10:38:49.339"></status>
 </kw>
-<kw name="Should Contain" library="BuiltIn">
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>was created</arg>
-</arguments>
-<status status="PASS" endtime="20200529 11:46:43.453" starttime="20200529 11:46:43.453"></status>
-</kw>
-<kw name="Get Substring" library="String">
-<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
-<arguments>
-<arg>${stdout}</arg>
-<arg>0</arg>
-<arg>-12</arg>
+<arg>1</arg>
 </arguments>
 <assign>
 <var>${id}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.454" level="INFO">${id} = ehin6t1k6ko3ce9p60qj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.454" starttime="20200529 11:46:43.453"></status>
+<msg timestamp="20200610 10:38:49.345" level="INFO">${id} = ID : ehin6t1j6gp3ccpm64qj8cot5s1ju9h5</msg>
+<status status="PASS" endtime="20200610 10:38:49.345" starttime="20200610 10:38:49.345"></status>
+</kw>
+<kw name="Get Substring" library="String">
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<arguments>
+<arg>${id}</arg>
+<arg>5</arg>
+</arguments>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.346" level="INFO">${id} = ehin6t1j6gp3ccpm64qj8cot5s1ju9h5</msg>
+<status status="PASS" endtime="20200610 10:38:49.346" starttime="20200610 10:38:49.345"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -264,9 +282,9 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${desc}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.454" level="INFO">Running command './StoryManager story show ehin6t1k6ko3ce9p60qj4d1j64o3ed1j.value.Description 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.459" level="INFO">${desc} = ""</msg>
-<status status="PASS" endtime="20200529 11:46:43.459" starttime="20200529 11:46:43.454"></status>
+<msg timestamp="20200610 10:38:49.346" level="INFO">Running command './StoryManager story show ehin6t1j6gp3ccpm64qj8cot5s1ju9h5.value.Description 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.351" level="INFO">${desc} = ""</msg>
+<status status="PASS" endtime="20200610 10:38:49.351" starttime="20200610 10:38:49.346"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -274,7 +292,7 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <arg>${desc}</arg>
 <arg>""</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.460" starttime="20200529 11:46:43.459"></status>
+<status status="PASS" endtime="20200610 10:38:49.352" starttime="20200610 10:38:49.351"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -284,10 +302,10 @@ ehin6t1k68oj0e9m64qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.460" level="INFO">Running command './StoryManager story edit ehin6t1k6ko3ce9p60qj4d1j64o3ed1j -d "new description" 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.469" level="INFO">${stdout} = New head #n3024hl9dtpf7ndv8oi5mibvu84ouk3v (was #vltc08hm8nupti7qtm3b8v0eh8sc8k6p)
-ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
-<status status="PASS" endtime="20200529 11:46:43.469" starttime="20200529 11:46:43.460"></status>
+<msg timestamp="20200610 10:38:49.352" level="INFO">Running command './StoryManager story edit ehin6t1j6gp3ccpm64qj8cot5s1ju9h5 -d "new description" 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.358" level="INFO">${stdout} = test edited
+ID : ehin6t1j6gp3ccpm64qj8cot5s1ju9h5</msg>
+<status status="PASS" endtime="20200610 10:38:49.358" starttime="20200610 10:38:49.352"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -297,9 +315,9 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${desc}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.470" level="INFO">Running command './StoryManager story show ehin6t1k6ko3ce9p60qj4d1j64o3ed1j.value.Description 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.475" level="INFO">${desc} = "new description"</msg>
-<status status="PASS" endtime="20200529 11:46:43.475" starttime="20200529 11:46:43.469"></status>
+<msg timestamp="20200610 10:38:49.359" level="INFO">Running command './StoryManager story show ehin6t1j6gp3ccpm64qj8cot5s1ju9h5.value.Description 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.364" level="INFO">${desc} = "new description"</msg>
+<status status="PASS" endtime="20200610 10:38:49.364" starttime="20200610 10:38:49.359"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -307,9 +325,9 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <arg>${desc}</arg>
 <arg>"new description"</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.476" starttime="20200529 11:46:43.475"></status>
+<status status="PASS" endtime="20200610 10:38:49.364" starttime="20200610 10:38:49.364"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.476" critical="yes" starttime="20200529 11:46:43.446"></status>
+<status status="PASS" endtime="20200610 10:38:49.364" critical="yes" starttime="20200610 10:38:49.339"></status>
 </test>
 <test id="s1-t4" name="Edit story title">
 <kw name="Run" library="OperatingSystem">
@@ -320,30 +338,34 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.477" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.483" level="INFO">${stdout} = ehin6t1k70oj2e1j74rj4d1j64o3ed1j was created</msg>
-<status status="PASS" endtime="20200529 11:46:43.483" starttime="20200529 11:46:43.477"></status>
+<msg timestamp="20200610 10:38:49.365" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.371" level="INFO">${stdout} = test edited
+ID : ehin6t1j6os38dpk70p1gl8b95cki7hk</msg>
+<status status="PASS" endtime="20200610 10:38:49.371" starttime="20200610 10:38:49.365"></status>
 </kw>
-<kw name="Should Contain" library="BuiltIn">
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>was created</arg>
-</arguments>
-<status status="PASS" endtime="20200529 11:46:43.484" starttime="20200529 11:46:43.484"></status>
-</kw>
-<kw name="Get Substring" library="String">
-<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
-<arguments>
-<arg>${stdout}</arg>
-<arg>0</arg>
-<arg>-12</arg>
+<arg>1</arg>
 </arguments>
 <assign>
 <var>${id}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.484" level="INFO">${id} = ehin6t1k70oj2e1j74rj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.484" starttime="20200529 11:46:43.484"></status>
+<msg timestamp="20200610 10:38:49.371" level="INFO">${id} = ID : ehin6t1j6os38dpk70p1gl8b95cki7hk</msg>
+<status status="PASS" endtime="20200610 10:38:49.371" starttime="20200610 10:38:49.371"></status>
+</kw>
+<kw name="Get Substring" library="String">
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<arguments>
+<arg>${id}</arg>
+<arg>5</arg>
+</arguments>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.372" level="INFO">${id} = ehin6t1j6os38dpk70p1gl8b95cki7hk</msg>
+<status status="PASS" endtime="20200610 10:38:49.372" starttime="20200610 10:38:49.371"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -353,9 +375,9 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${title}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.485" level="INFO">Running command './StoryManager story show ehin6t1k70oj2e1j74rj4d1j64o3ed1j.value.Title 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.490" level="INFO">${title} = "test"</msg>
-<status status="PASS" endtime="20200529 11:46:43.490" starttime="20200529 11:46:43.484"></status>
+<msg timestamp="20200610 10:38:49.372" level="INFO">Running command './StoryManager story show ehin6t1j6os38dpk70p1gl8b95cki7hk.value.Title 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.376" level="INFO">${title} = "test"</msg>
+<status status="PASS" endtime="20200610 10:38:49.376" starttime="20200610 10:38:49.372"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -363,7 +385,7 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <arg>${title}</arg>
 <arg>"test"</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.490" starttime="20200529 11:46:43.490"></status>
+<status status="PASS" endtime="20200610 10:38:49.377" starttime="20200610 10:38:49.377"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -373,10 +395,10 @@ ehin6t1k6ko3ce9p60qj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.491" level="INFO">Running command './StoryManager story edit ehin6t1k70oj2e1j74rj4d1j64o3ed1j -t "new title" 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.499" level="INFO">${stdout} = New head #qd5thpnc4sicqmcbotu6pt85aesvcpg9 (was #vltc08hm8nupti7qtm3b8v0eh8sc8k6p)
-ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
-<status status="PASS" endtime="20200529 11:46:43.499" starttime="20200529 11:46:43.491"></status>
+<msg timestamp="20200610 10:38:49.377" level="INFO">Running command './StoryManager story edit ehin6t1j6os38dpk70p1gl8b95cki7hk -t "new title" 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.385" level="INFO">${stdout} = test edited
+ID : ehin6t1j6os38dpk70p1gl8b95cki7hk</msg>
+<status status="PASS" endtime="20200610 10:38:49.385" starttime="20200610 10:38:49.377"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -386,9 +408,9 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${title}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.500" level="INFO">Running command './StoryManager story show ehin6t1k70oj2e1j74rj4d1j64o3ed1j.value.Title 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.507" level="INFO">${title} = "new title"</msg>
-<status status="PASS" endtime="20200529 11:46:43.507" starttime="20200529 11:46:43.499"></status>
+<msg timestamp="20200610 10:38:49.385" level="INFO">Running command './StoryManager story show ehin6t1j6os38dpk70p1gl8b95cki7hk.value.Title 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.390" level="INFO">${title} = "new title"</msg>
+<status status="PASS" endtime="20200610 10:38:49.390" starttime="20200610 10:38:49.385"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -396,9 +418,9 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <arg>${title}</arg>
 <arg>"new title"</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.508" starttime="20200529 11:46:43.508"></status>
+<status status="PASS" endtime="20200610 10:38:49.390" starttime="20200610 10:38:49.390"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.508" critical="yes" starttime="20200529 11:46:43.476"></status>
+<status status="PASS" endtime="20200610 10:38:49.391" critical="yes" starttime="20200610 10:38:49.364"></status>
 </test>
 <test id="s1-t5" name="Close story">
 <kw name="Run" library="OperatingSystem">
@@ -409,30 +431,34 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.509" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.516" level="INFO">${stdout} = ehin6t1l64q32d9p64sj4d1j64o3ed1j was created</msg>
-<status status="PASS" endtime="20200529 11:46:43.516" starttime="20200529 11:46:43.509"></status>
+<msg timestamp="20200610 10:38:49.391" level="INFO">Running command './StoryManager story create test 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.397" level="INFO">${stdout} = test edited
+ID : ehin6t1j74q3ecpn60s2i4b2agdlck2n</msg>
+<status status="PASS" endtime="20200610 10:38:49.397" starttime="20200610 10:38:49.391"></status>
 </kw>
-<kw name="Should Contain" library="BuiltIn">
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<kw name="Get Line" library="String">
+<doc>Returns the specified line from the given ``string``.</doc>
 <arguments>
 <arg>${stdout}</arg>
-<arg>was created</arg>
-</arguments>
-<status status="PASS" endtime="20200529 11:46:43.517" starttime="20200529 11:46:43.517"></status>
-</kw>
-<kw name="Get Substring" library="String">
-<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
-<arguments>
-<arg>${stdout}</arg>
-<arg>0</arg>
-<arg>-12</arg>
+<arg>1</arg>
 </arguments>
 <assign>
 <var>${id}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.517" level="INFO">${id} = ehin6t1l64q32d9p64sj4d1j64o3ed1j</msg>
-<status status="PASS" endtime="20200529 11:46:43.517" starttime="20200529 11:46:43.517"></status>
+<msg timestamp="20200610 10:38:49.397" level="INFO">${id} = ID : ehin6t1j74q3ecpn60s2i4b2agdlck2n</msg>
+<status status="PASS" endtime="20200610 10:38:49.397" starttime="20200610 10:38:49.397"></status>
+</kw>
+<kw name="Get Substring" library="String">
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<arguments>
+<arg>${id}</arg>
+<arg>5</arg>
+</arguments>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20200610 10:38:49.398" level="INFO">${id} = ehin6t1j74q3ecpn60s2i4b2agdlck2n</msg>
+<status status="PASS" endtime="20200610 10:38:49.398" starttime="20200610 10:38:49.398"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -442,9 +468,9 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${state}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.518" level="INFO">Running command './StoryManager story show ehin6t1l64q32d9p64sj4d1j64o3ed1j.value.State 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.523" level="INFO">${state} = "Open"</msg>
-<status status="PASS" endtime="20200529 11:46:43.523" starttime="20200529 11:46:43.517"></status>
+<msg timestamp="20200610 10:38:49.398" level="INFO">Running command './StoryManager story show ehin6t1j74q3ecpn60s2i4b2agdlck2n.value.State 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.403" level="INFO">${state} = "Open"</msg>
+<status status="PASS" endtime="20200610 10:38:49.403" starttime="20200610 10:38:49.398"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -452,7 +478,7 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <arg>${state}</arg>
 <arg>"Open"</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.524" starttime="20200529 11:46:43.523"></status>
+<status status="PASS" endtime="20200610 10:38:49.403" starttime="20200610 10:38:49.403"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -462,10 +488,10 @@ ehin6t1k70oj2e1j74rj4d1j64o3ed1j edited</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.524" level="INFO">Running command './StoryManager story close ehin6t1l64q32d9p64sj4d1j64o3ed1j 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.531" level="INFO">${stdout} = New head #l0ui6mfi98j99ffld75ioqel07oecisv (was #vltc08hm8nupti7qtm3b8v0eh8sc8k6p)
-ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
-<status status="PASS" endtime="20200529 11:46:43.531" starttime="20200529 11:46:43.524"></status>
+<msg timestamp="20200610 10:38:49.404" level="INFO">Running command './StoryManager story close ehin6t1j74q3ecpn60s2i4b2agdlck2n 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.411" level="INFO">${stdout} = test edited
+ID : ehin6t1j74q3ecpn60s2i4b2agdlck2n</msg>
+<status status="PASS" endtime="20200610 10:38:49.411" starttime="20200610 10:38:49.403"></status>
 </kw>
 <kw name="Run" library="OperatingSystem">
 <doc>Runs the given command in the system and returns the output.</doc>
@@ -475,9 +501,9 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <assign>
 <var>${state}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.532" level="INFO">Running command './StoryManager story show ehin6t1l64q32d9p64sj4d1j64o3ed1j.value.State 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.538" level="INFO">${state} = "Close"</msg>
-<status status="PASS" endtime="20200529 11:46:43.538" starttime="20200529 11:46:43.531"></status>
+<msg timestamp="20200610 10:38:49.411" level="INFO">Running command './StoryManager story show ehin6t1j74q3ecpn60s2i4b2agdlck2n.value.State 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.416" level="INFO">${state} = "Close"</msg>
+<status status="PASS" endtime="20200610 10:38:49.416" starttime="20200610 10:38:49.411"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -485,9 +511,9 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <arg>${state}</arg>
 <arg>"Close"</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.539" starttime="20200529 11:46:43.538"></status>
+<status status="PASS" endtime="20200610 10:38:49.416" starttime="20200610 10:38:49.416"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.539" critical="yes" starttime="20200529 11:46:43.509"></status>
+<status status="PASS" endtime="20200610 10:38:49.417" critical="yes" starttime="20200610 10:38:49.391"></status>
 </test>
 <test id="s1-t6" name="User">
 <kw name="Run" library="OperatingSystem">
@@ -498,9 +524,9 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <assign>
 <var>${stdout}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.540" level="INFO">Running command './StoryManager user 2&gt;&amp;1'.</msg>
-<msg timestamp="20200529 11:46:43.545" level="INFO">${stdout} = Alexis Bredel --&gt; PO</msg>
-<status status="PASS" endtime="20200529 11:46:43.545" starttime="20200529 11:46:43.540"></status>
+<msg timestamp="20200610 10:38:49.417" level="INFO">Running command './StoryManager user 2&gt;&amp;1'.</msg>
+<msg timestamp="20200610 10:38:49.421" level="INFO">${stdout} = Alexis Bredel --&gt; PO</msg>
+<status status="PASS" endtime="20200610 10:38:49.421" starttime="20200610 10:38:49.417"></status>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are unequal.</doc>
@@ -508,9 +534,9 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <arg>${stdout}</arg>
 <arg>Alexis Bredel --&gt; PO</arg>
 </arguments>
-<status status="PASS" endtime="20200529 11:46:43.545" starttime="20200529 11:46:43.545"></status>
+<status status="PASS" endtime="20200610 10:38:49.422" starttime="20200610 10:38:49.422"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.545" critical="yes" starttime="20200529 11:46:43.539"></status>
+<status status="PASS" endtime="20200610 10:38:49.422" critical="yes" starttime="20200610 10:38:49.417"></status>
 </test>
 <test id="s1-t7" name="Remove db and no more db">
 <kw name="Count Directories In Directory" library="OperatingSystem">
@@ -521,10 +547,10 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <assign>
 <var>${files}</var>
 </assign>
-<msg timestamp="20200529 11:46:43.546" html="yes" level="INFO">Listing contents of directory '&lt;a href="file:///home/alexis/Documents/Thales/StoryManager/tests"&gt;/home/alexis/Documents/Thales/StoryManager/tests&lt;/a&gt;'.</msg>
-<msg timestamp="20200529 11:46:43.546" level="INFO">1 directory.</msg>
-<msg timestamp="20200529 11:46:43.546" level="INFO">${files} = 1</msg>
-<status status="PASS" endtime="20200529 11:46:43.546" starttime="20200529 11:46:43.546"></status>
+<msg timestamp="20200610 10:38:49.423" html="yes" level="INFO">Listing contents of directory '&lt;a href="file:///home/alexis/Documents/Thales/StoryManager/tests"&gt;/home/alexis/Documents/Thales/StoryManager/tests&lt;/a&gt;'.</msg>
+<msg timestamp="20200610 10:38:49.423" level="INFO">1 directory.</msg>
+<msg timestamp="20200610 10:38:49.423" level="INFO">${files} = 1</msg>
+<status status="PASS" endtime="20200610 10:38:49.423" starttime="20200610 10:38:49.422"></status>
 </kw>
 <kw name="Should Be Equal As Integers" library="BuiltIn">
 <doc>Fails if objects are unequal after converting them to integers.</doc>
@@ -532,10 +558,10 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <arg>${files}</arg>
 <arg>1</arg>
 </arguments>
-<msg timestamp="20200529 11:46:43.547" level="INFO">Argument types are:
+<msg timestamp="20200610 10:38:49.423" level="INFO">Argument types are:
 &lt;type 'int'&gt;
 &lt;type 'unicode'&gt;</msg>
-<status status="PASS" endtime="20200529 11:46:43.547" starttime="20200529 11:46:43.547"></status>
+<status status="PASS" endtime="20200610 10:38:49.423" starttime="20200610 10:38:49.423"></status>
 </kw>
 <kw name="Remove Directory" library="OperatingSystem">
 <doc>Removes the directory pointed to by the given ``path``.</doc>
@@ -543,13 +569,13 @@ ehin6t1l64q32d9p64sj4d1j64o3ed1j closed</msg>
 <arg>/home/alexis/Documents/Thales/StoryManager/tests/Stories</arg>
 <arg>recursive=True</arg>
 </arguments>
-<msg timestamp="20200529 11:46:43.548" html="yes" level="INFO">Removed directory '&lt;a href="file:///home/alexis/Documents/Thales/StoryManager/tests/Stories"&gt;/home/alexis/Documents/Thales/StoryManager/tests/Stories&lt;/a&gt;'.</msg>
-<status status="PASS" endtime="20200529 11:46:43.548" starttime="20200529 11:46:43.547"></status>
+<msg timestamp="20200610 10:38:49.424" html="yes" level="INFO">Removed directory '&lt;a href="file:///home/alexis/Documents/Thales/StoryManager/tests/Stories"&gt;/home/alexis/Documents/Thales/StoryManager/tests/Stories&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20200610 10:38:49.424" starttime="20200610 10:38:49.423"></status>
 </kw>
-<status status="PASS" endtime="20200529 11:46:43.548" critical="yes" starttime="20200529 11:46:43.546"></status>
+<status status="PASS" endtime="20200610 10:38:49.424" critical="yes" starttime="20200610 10:38:49.422"></status>
 </test>
 <doc>Tests of StoryManager commands</doc>
-<status status="PASS" endtime="20200529 11:46:43.548" starttime="20200529 11:46:43.364"></status>
+<status status="PASS" endtime="20200610 10:38:49.424" starttime="20200610 10:38:49.271"></status>
 </suite>
 <statistics>
 <total>

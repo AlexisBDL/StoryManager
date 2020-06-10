@@ -6,11 +6,10 @@ Library    String
 *** Test Cases ***
 Create story
 	${stdout}=	Run	./StoryManager story create test
-	Should Contain	${stdout}	was created
-	${id}=	Get Substring	${stdout}	0	-12
-	${stdout}=	Run	./StoryManager list
-	Log	${id}
-	Should Contain	${stdout}	${id}
+        ${title}=       Get Line        ${stdout}       0
+	${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+        Should Contain  ${stdout}   test
         ${stdout}=      Run     ./StoryManager story show ${id}
         Should Contain  ${stdout}       value: struct Story { 
         Should Contain  ${stdout}       Author: "Alexis Bredel --> PO",
@@ -18,11 +17,13 @@ Create story
         Should Contain  ${stdout}       Effort: 0,
         Should Contain  ${stdout}       State: "Open",
         Should Contain  ${stdout}       Title: "test",
+        Should Contain  ${stdout}       Tasks: [],
 	
 Edit story effort
 	${stdout}=      Run     ./StoryManager story create test
-        Should Contain  ${stdout}       was created
-        ${id}=  Get Substring   ${stdout}       0       -12
+        Should Contain  ${stdout}       test edited
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
 	${effort}=	Run	./StoryManager story show ${id}.value.Effort
 	Should Be Equal	${effort}	0
         ${stdout}=      Run     ./StoryManager story edit ${id} -e 5
@@ -31,8 +32,8 @@ Edit story effort
 
 Edit story description
         ${stdout}=      Run     ./StoryManager story create test
-        Should Contain  ${stdout}       was created
-        ${id}=	Get Substring   ${stdout}       0       -12
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
         ${desc}=	Run     ./StoryManager story show ${id}.value.Description
         Should Be Equal	${desc}	""
         ${stdout}=      Run     ./StoryManager story edit ${id} -d "new description"
@@ -41,8 +42,8 @@ Edit story description
 
 Edit story title
         ${stdout}=      Run     ./StoryManager story create test
-        Should Contain  ${stdout}       was created
-        ${id}=	Get Substring   ${stdout}       0       -12
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
         ${title}=       Run     ./StoryManager story show ${id}.value.Title
         Should Be Equal         ${title}        "test"
         ${stdout}=      Run     ./StoryManager story edit ${id} -t "new title"
@@ -51,8 +52,8 @@ Edit story title
 
 Close story
         ${stdout}=      Run     ./StoryManager story create test
-        Should Contain	${stdout}	was created
-	${id}=	Get Substring	${stdout}	0	-12
+	${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
         ${state}=	Run     ./StoryManager story show ${id}.value.State
         Should Be Equal         ${state}        "Open"
         ${stdout}=      Run     ./StoryManager story close ${id}

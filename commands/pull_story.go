@@ -46,7 +46,7 @@ func runPullStory(cmd *cobra.Command, args []string) error {
 	d.PanicIfError(err)
 
 	if tLocal.After(tSrc) {
-		d.CheckErrorNoUsage(fmt.Errorf("Your story %s is more recent. No changes", ID))
+		d.CheckErrorNoUsage(fmt.Errorf("Your story %s is more recently. No changes", ID))
 	}
 
 	sinkDB, sinkDataset, err := cfg.GetDataset(src + "::" + ID)
