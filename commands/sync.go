@@ -58,7 +58,6 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 	err = d.Try(func() {
 		defer profile.MaybeStartProfile().Stop()
 		datas.Pull(sourceStore, sinkDB, sourceRef, progressCh)
-
 		var err error
 		sinkDataset, err = sinkDB.FastForward(sinkDataset, sourceRef)
 		if err == datas.ErrMergeNeeded {
@@ -72,13 +71,13 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 		log.Fatal(err)
 	}
 
-	//close(progressCh)
+	close(progressCh)
 	if last := <-lastProgressCh; last.DoneCount > 0 {
 		status.Printf("Done - Synced %s in %s (%s/s)",
 			humanize.Bytes(last.ApproxWrittenBytes), since(start), bytesPerSec(last.ApproxWrittenBytes, start))
 		status.Done()
 	} else if !sinkExists {
-		fmt.Printf("All chunks already exist at destination! Created new dataset in %s.\n", dest)
+		fmt.Printf("All chunks already exist at destination! Created new dataset %s.\n", dest)
 	} else if nonFF && !sourceRef.Equals(sinkRef) {
 		fmt.Printf("Abandoning %s; new head is %s\n", sinkRef.TargetHash(), sourceRef.TargetHash())
 	} else {

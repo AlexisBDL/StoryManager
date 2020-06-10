@@ -17,16 +17,6 @@ var (
 )
 
 func runListStory(cmd *cobra.Command, args []string) error {
-
-	if dbTarget != "" {
-		find, err := cfg.FindDatabase(dbTarget)
-		if !find {
-			fmt.Printf("Database not found at %s\n", dbTarget)
-			d.PanicIfError(err)
-			return nil
-		}
-	}
-
 	db, err := cfg.GetDatabase(dbTarget)
 	d.CheckError(err)
 	defer db.Close()
