@@ -24,11 +24,15 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 		title, err := strconv.Unquote(types.EncodedValue(valTitle))
 		d.PanicIfError(err)
 		data := []byte(title[:4] + datetime.Now().String()[20:28] + randomString(10))
-		ID = hash.New(data[:20]).String()
-		util.SyncStory("", ID, dest, cfg, true)
+		newID := hash.New(data[:20]).String()
+		util.SyncStory(ID, newID, "Stories", cfg, true)
 		fmt.Println("Duplicate ID is : " + ID)
 	} else {
-		util.SyncStory("", ID, dest, cfg, true)
+		if ok, err := cfg.FindDatabase(dest); !ok {
+			d.PanicIfError(err)
+			d.CheckErrorNoUsage(fmt.Errorf("Database not found : %s", dest))
+		}
+		util.SyncStory(ID, ID, dest, cfg, true)
 	}
 
 	return nil
@@ -37,7 +41,7 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 var copyStoryCmd = &cobra.Command{
 	Use:   "copy <ID> <destination>",
 	Short: "Move the story <ID> with the databases <destination>.",
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.MinimumNArgs(1),
 	RunE:  runCopyStory,
 }
 

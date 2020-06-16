@@ -51,7 +51,7 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 
 var createStoryCmd = &cobra.Command{
 	Use:   "create <title>",
-	Short: "Create a new story.",
+	Short: "Create a new story. If the databae is not created, this command create it in current dir",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runCreateStory,
 }
