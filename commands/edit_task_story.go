@@ -7,7 +7,6 @@ import (
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
 	"github.com/attic-labs/noms/go/d"
-	"github.com/attic-labs/noms/go/types"
 
 	"github.com/spf13/cobra"
 )
@@ -30,14 +29,8 @@ func runEditTaskStory(cmd *cobra.Command, args []string) error {
 	defer db.Close()
 
 	// Test Open
-	_, valState, _ := cfg.GetPath(ID + storyState)
-	if valState == nil {
-		d.CheckErrorNoUsage(fmt.Errorf("Story %s not found in my Stories", ID))
-	}
-	state, err := strconv.Unquote(types.EncodedValue(valState))
-	d.PanicIfError(err)
-	if state == stateClose {
-		fmt.Printf("The story %s is close, you con't modify it\n", ID)
+	if isOpenStory(ID) {
+		fmt.Printf("The story %s is close, you can't modify it\n", ID)
 		return nil
 	}
 

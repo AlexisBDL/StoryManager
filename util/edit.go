@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/AlexisBDL/StoryManager/config"
@@ -76,6 +77,28 @@ func ListGet(specStr string, id uint64) types.Value {
 		d.CheckErrorNoUsage(fmt.Errorf("value at %s is not list", specStr))
 	}
 	return types.EmptyStruct
+}
+
+func ListGetBy(specStr string, field string, value string) {
+	sp, err := spec.ForPath(specStr)
+	d.PanicIfError(err)
+	rootVal, basePath := splitPath(sp)
+	listVal := basePath.Resolve(rootVal, sp.GetDatabase())
+	if listVal == nil {
+		d.CheckErrorNoUsage(fmt.Errorf("no value at path: %s", specStr))
+	}
+	if list, ok := listVal.(types.List); ok {
+		list.IterAll(func(v types.Value, idx uint64) {
+			val := v.(types.Struct)
+			test := val.Get(field)
+			valTest, _ := strconv.Unquote(types.EncodedValue(test))
+			if valTest == value {
+				fmt.Println(types.EncodedValue(val))
+			}
+		})
+	} else {
+		d.CheckErrorNoUsage(fmt.Errorf("value at %s is not list", specStr))
+	}
 }
 
 func ListLen(specStr string) uint64 {

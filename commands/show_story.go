@@ -10,9 +10,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var showTasks bool
+
 func runShowStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	db, ds, err := cfg.GetPath(ID)
+	option := ""
+	if showTasks {
+		option = ".value.Tasks"
+	}
+	db, ds, err := cfg.GetPath(ID + option)
 	d.CheckError(err)
 	defer db.Close()
 
@@ -32,11 +38,14 @@ func runShowStory(cmd *cobra.Command, args []string) error {
 
 var showStoryCmd = &cobra.Command{
 	Use:   "show <ID>",
-	Short: "Show a story.",
+	Short: "Show the story ID.",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runShowStory,
 }
 
 func init() {
 	storyCmd.AddCommand(showStoryCmd)
+
+	showStoryCmd.Flags().BoolVarP(&showTasks, "tasks", "t", false, "Display tasks of story ID")
+	showStoryCmd.Flags().Lookup("tasks").NoOptDefVal = "true"
 }

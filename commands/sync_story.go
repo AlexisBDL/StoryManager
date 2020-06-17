@@ -14,6 +14,11 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 	destStore := args[1]
 
+	if isOpenStory(ID) {
+		fmt.Printf("The story %s is close, you can't modify it\n", ID)
+		return nil
+	}
+
 	// temp --> source
 	util.SyncStory(ID, "source", "temp", cfg, false)
 
