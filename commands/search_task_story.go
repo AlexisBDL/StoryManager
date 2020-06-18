@@ -2,7 +2,6 @@ package commands
 
 import (
 	"github.com/AlexisBDL/StoryManager/util"
-	"github.com/attic-labs/noms/go/d"
 
 	"github.com/spf13/cobra"
 )
@@ -15,15 +14,13 @@ var (
 func runSearchTaskStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
 
-	db, err := cfg.GetDatabase(ID)
-	d.PanicIfError(err)
-	defer db.Close()
+	resolvedList := cfg.ResolvePathSpec(ID) + storyTasks
 
 	if makerTask != "" {
-		util.ListGetBy("Stories::"+ID+storyTasks, "Maker", makerTask)
+		util.ListGetBy(resolvedList, "Maker", makerTask)
 	}
 	if stateTask != "" {
-		util.ListGetBy("Stories::"+ID+storyTasks, "State", stateTask)
+		util.ListGetBy(resolvedList, "State", stateTask)
 	}
 
 	return nil

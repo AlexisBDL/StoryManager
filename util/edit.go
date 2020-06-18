@@ -33,7 +33,6 @@ func ListInsert(db datas.Database, specStr string, pos int, fields []string) *sp
 func ListDel(db datas.Database, specStr string, pos int) *spec.AbsolutePath {
 	sp, err := spec.ForPath(specStr)
 	d.PanicIfError(err)
-
 	rootVal, basePath := splitPath(sp)
 	patch := diff.Patch{}
 	// TODO: if len-pos is large this will start to become problematic
