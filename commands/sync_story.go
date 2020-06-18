@@ -19,6 +19,11 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
+	if isOpenStory(destStore + "::" + ID) {
+		fmt.Printf("The story %s is close in destination store, you can't modify it\n", ID)
+		return nil
+	}
+
 	// temp --> source
 	util.SyncStory(ID, "source", "temp", cfg, false)
 
@@ -48,8 +53,8 @@ func runSyncStory(cmd *cobra.Command, args []string) error {
 }
 
 var pushStoryCmd = &cobra.Command{
-	Use:   "sync <ID> <destination>",
-	Short: "Syncronize the story <ID> with the databases <destination>.",
+	Use:   "sync <ID> <destination/DbName>",
+	Short: "Syncronize the story <ID> with the databases <destination/DbName>.",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runSyncStory,
 }
