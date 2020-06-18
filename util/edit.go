@@ -126,7 +126,7 @@ func StoryEdit(db datas.Database, resolved string, fields []string) *spec.Absolu
 	return ApplyStructEdits(db, rootVal, basePath, fields)
 }
 
-func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID string, msg string, user string, title string) {
+func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID, msgCommit, msgCli, user string) {
 	if valPath == nil {
 		d.CheckErrorNoUsage(errors.New(fmt.Sprintf("Error resolving value path")))
 	}
@@ -139,13 +139,13 @@ func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID string,
 		}
 	}
 
-	meta, err := spec.CreateCommitMetaStruct(db, "", msg, user, nil, nil)
+	meta, err := spec.CreateCommitMetaStruct(db, "", msgCommit, user, nil, nil)
 	d.CheckErrorNoUsage(err)
 
 	ds, err = db.Commit(ds, valPath, datas.CommitOptions{Meta: meta})
 	d.CheckErrorNoUsage(err)
 
-	fmt.Printf("%s edited\nID : %s\n", title, ID)
+	fmt.Println(msgCli)
 }
 
 func MergeStory(db datas.Database, ds1, ds2, merge, user string) {

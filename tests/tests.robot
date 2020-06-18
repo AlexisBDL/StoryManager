@@ -9,7 +9,7 @@ Create story
         ${title}=       Get Line        ${stdout}       0
 	${id}=  Get Line	${stdout}	1
         ${id}=  Get Substring   ${id}   5
-        Should Contain  ${stdout}   test
+        Should Contain  ${stdout}   Story test created
         ${stdout}=      Run     ./StoryManager story show ${id}
         Should Contain  ${stdout}       value: struct Story { 
         Should Contain  ${stdout}       Author: "Alexis Bredel --> PO",
@@ -21,7 +21,6 @@ Create story
 	
 Edit story effort
 	${stdout}=      Run     ./StoryManager story create test
-        Should Contain  ${stdout}       test edited
         ${id}=  Get Line	${stdout}	1
         ${id}=  Get Substring   ${id}   5
 	${effort}=	Run	./StoryManager story show ${id}.value.Effort
@@ -63,6 +62,48 @@ Close story
 User
         ${stdout}=      Run     ./StoryManager user
         Should Be Equal         ${stdout}       Alexis Bredel --> PO
+
+Add task
+        ${stdout}=      Run     ./StoryManager story create test
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+	${stdout}=	Run	./StoryManager story Tadd ${id} task
+        Should Contain  ${stdout}       Task task (0) added in story
+        Should Contain  ${stdout}       ID : ${id}
+        ${stdout}=      Run     ./StoryManager story show ${id} -t
+        Should Contain  ${stdout}       Goal: "task",
+        Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
+        Should Contain  ${stdout}       State: "",
+
+Edit task
+        ${stdout}=      Run     ./StoryManager story create test
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+	${stdout}=	Run	./StoryManager story Tadd ${id} task
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 0 -s Complete
+        Should Contain  ${stdout}       Task 0 edited in story test
+        Should Contain  ${stdout}       ID : ${id}
+        ${stdout}=      Run     ./StoryManager story show ${id} -t
+        Should Contain  ${stdout}       Goal: "task",
+        Should Contain  ${stdout}       ID: 0,
+        Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
+        Should Contain  ${stdout}       State: "Complete",
+
+Search task
+        ${stdout}=      Run     ./StoryManager story create test
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+	${stdout}=	Run	./StoryManager story Tadd ${id} task
+        ${stdout}=	Run	./StoryManager story Tadd ${id} task2
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 1 -s Complete
+        ${stdout}=	Run	./StoryManager story Tsearch ${id} -s Complete
+        Should Contain  ${stdout}       Goal: "task2",
+        Should Contain  ${stdout}       ID: 1,
+        Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
+        Should Contain  ${stdout}       State: "Complete",
+        Should Not Contain       ${stdout}       ID: 0,
+
+
 
 Remove db and no more db
 	${files}=	Count Directories In Directory	${CURDIR}

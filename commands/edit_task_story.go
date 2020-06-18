@@ -71,10 +71,11 @@ func runEditTaskStory(cmd *cobra.Command, args []string) error {
 
 	// Commit
 	title := getTitle(ID)
-	msg := "Edit task " + IDT + " on story ID " + ID
+	msgCommit := "Edit task : " + IDT
+	msgCli := "Task " + IDT + " edited in story " + title + "\nID : " + ID
 	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, valPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msgCommit, msgCli, user)
 
 	return nil
 }

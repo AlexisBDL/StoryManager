@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/AlexisBDL/StoryManager/spec"
 	"github.com/AlexisBDL/StoryManager/util"
@@ -37,7 +38,8 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 	)
 
 	resolvedList := cfg.ResolvePathSpec(ID) + storyTasks
-	absPathTask := util.ApplyStructEdits(db, newTask(goal, maker, util.ListLen(resolvedList)), nil, nil)
+	len := util.ListLen(resolvedList)
+	absPathTask := util.ApplyStructEdits(db, newTask(goal, maker, len), nil, nil)
 
 	fieldsList = append(fieldsList, "@#"+absPathTask.Hash.String())
 	absPathList := util.ListAppend(resolvedList, fieldsList)
@@ -45,14 +47,15 @@ func runAddTaskStory(cmd *cobra.Command, args []string) error {
 	absPath, err := spec.NewAbsolutePath("#" + absPathList.Hash.String() + ".value")
 	d.CheckError(err)
 
-	absPathTask = util.ApplyStructEdits(db, newTask(goal, maker, util.ListLen(resolvedList)), nil, nil)
+	absPathTask = util.ApplyStructEdits(db, newTask(goal, maker, len), nil, nil)
 
 	// Commit
 	title := getTitle(ID)
-	msg := "Add task " + goal + " on story ID " + ID
+	msgCommit := "Add task " + goal + " (" + strconv.Itoa(int(len)) + ")"
+	msgCli := "Task " + goal + " (" + strconv.Itoa(int(len)) + ") added in story " + title + "\nID : " + ID
 	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, valPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msgCommit, msgCli, user)
 
 	return nil
 }

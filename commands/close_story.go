@@ -29,10 +29,11 @@ func runCloseStory(cmd *cobra.Command, args []string) error {
 
 	// Commit
 	title := getTitle(ID)
-	msg := "Story " + title + " with ID " + ID + " was closed"
+	msgCommit := "Story " + title + " with ID " + ID + " was closed"
+	msgCli := "Story closed"
 	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, valPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msgCommit, msgCli, user)
 
 	return nil
 }

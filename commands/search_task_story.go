@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	makerTask = "m"
+	goalTask  string
+	makerTask string
 	stateTask string
 )
 
@@ -16,6 +17,9 @@ func runSearchTaskStory(cmd *cobra.Command, args []string) error {
 
 	resolvedList := cfg.ResolvePathSpec(ID) + storyTasks
 
+	if goalTask != "" {
+		util.ListGetBy(resolvedList, "Goal", goalTask)
+	}
 	if makerTask != "" {
 		util.ListGetBy(resolvedList, "Maker", makerTask)
 	}
@@ -37,6 +41,9 @@ func init() {
 	storyCmd.AddCommand(searchTaskStoryCmd)
 
 	searchTaskStoryCmd.Flags().StringVarP(&makerTask, "maker", "m", "",
+		"Search by maker",
+	)
+	searchTaskStoryCmd.Flags().StringVarP(&goalTask, "goal", "g", "",
 		"Search by maker",
 	)
 	searchTaskStoryCmd.Flags().StringVarP(&stateTask, "state", "s", "",

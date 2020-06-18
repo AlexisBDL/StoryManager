@@ -40,11 +40,12 @@ func runCreateStory(cmd *cobra.Command, args []string) error {
 	absPath := util.ApplyStructEdits(db, newStory(title, user, db), nil, nil)
 
 	// Commits
-	msg := "Create new story " + title + " with ID " + ID
+	msgCommit := "Create new story " + title + " with ID " + ID
+	msgCli := "Story " + title + " created\nID : " + ID
 	ds := db.GetDataset(ID)
 	valPath := absPath.Resolve(db)
 
-	util.Commit(db, ds, valPath, ID, msg, user, title)
+	util.Commit(db, ds, valPath, ID, msgCommit, msgCli, user)
 
 	return nil
 }
