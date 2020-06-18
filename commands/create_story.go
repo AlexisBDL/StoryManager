@@ -24,7 +24,7 @@ func randomString(l int) string {
 func runCreateStory(cmd *cobra.Command, args []string) error {
 	title := args[0]
 
-	if 4 < len(title) {
+	if 4 > len(title) {
 		d.CheckErrorNoUsage(fmt.Errorf("Title of story need to be more long than 4 characters"))
 	}
 

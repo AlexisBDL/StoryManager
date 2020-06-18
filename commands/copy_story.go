@@ -17,7 +17,6 @@ var duplicate bool
 
 func runCopyStory(cmd *cobra.Command, args []string) error {
 	ID := args[0]
-	dest := args[1]
 
 	if duplicate {
 		_, valTitle, err := cfg.GetPath(ID + storyTitle)
@@ -28,10 +27,7 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 		util.SyncStory(ID, newID, "Stories", cfg, true)
 		fmt.Println("Duplicate ID is : " + ID)
 	} else {
-		if ok, err := cfg.FindDatabase(dest); !ok {
-			d.PanicIfError(err)
-			d.CheckErrorNoUsage(fmt.Errorf("Database not found : %s", dest))
-		}
+		dest := args[1]
 		util.SyncStory(ID, ID, dest, cfg, true)
 	}
 
@@ -39,8 +35,8 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 }
 
 var copyStoryCmd = &cobra.Command{
-	Use:   "copy <ID> <destination>",
-	Short: "Move the story <ID> with the databases <destination>.",
+	Use:   "copy <ID> <destination/DbName>",
+	Short: "Move the story <ID> with the databases <destination/DbName>.",
 	Args:  cobra.MinimumNArgs(1),
 	RunE:  runCopyStory,
 }
