@@ -35,7 +35,7 @@ func runDelTaskStory(cmd *cobra.Command, args []string) error {
 	absPath, err := spec.NewAbsolutePath("#" + absPathDelT.Hash.String() + ".value")
 	d.CheckError(err)
 
-	// non termine, update ID
+	// non termine, update ID / Fonction utile?????
 
 	// Commit
 	title := getTitle(ID)

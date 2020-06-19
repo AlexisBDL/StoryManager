@@ -151,7 +151,6 @@ Merge story
         Should Not Contain      ${stdout}       ${idd}
 
 
-
 Remove db and no more db
 	${files}=	Count Directories In Directory	${CURDIR}
 	Should Be Equal As Integers	${files}	1
