@@ -25,9 +25,6 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 	ID1 := args[0]
 	ID2 := args[1]
 
-	db, err := cfg.GetDatabase(ID1)
-	d.CheckError(err)
-
 	if isOpenStory(ID1) {
 		fmt.Printf("The story %s is close, you can't modify it\n", ID1)
 		return nil
@@ -63,8 +60,6 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 
 	// sync temp --> merge ==> MyStory --> newID
 	util.SyncStory("temp::merge", newID, "Stories", cfg, false)
-
-	db.Close()
 
 	dbU1, ds1, _ := cfg.GetDataset(ID1)
 	dbU1.Delete(ds1)

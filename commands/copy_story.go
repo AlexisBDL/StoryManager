@@ -35,7 +35,7 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 }
 
 var copyStoryCmd = &cobra.Command{
-	Use:   "copy <ID> <destination/DbName>",
+	Use:   "copy <ID> <destination/DbName> [Flag]",
 	Short: "Move the story <ID> with the databases <destination/DbName>.",
 	Args:  cobra.MinimumNArgs(1),
 	RunE:  runCopyStory,
