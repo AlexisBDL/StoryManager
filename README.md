@@ -110,13 +110,14 @@ story copy <ID> <value>
 story copy <ID> [-d]
 ```
 
-Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./home/your/path/Stories
+Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./your/path/Stories
 ______________________________
 ```
 story sync <ID> <value>
 ```
 
 Synchronize two databases (same ID) about the story ID. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories
+The CLI ask you for conflict and finaly you and the database at value have the same story ID
 ______________________________
 
 __________________________________________________________________________
@@ -196,13 +197,13 @@ struct Task {
 ```
 *** Copy story ***
 ```
-./StoryManager story copy ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/home/your/path/Usb/Stories 
+./StoryManager story copy ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/your/path/Usb/Stories 
 
 Done - Synced 0 B in 0s (0 B/s)
 ```
 If you want to check, whith the command : 
 ```
-./StoryManager story show ~/home/your/path/Usb/Stories::ehin6t1j74s34c9m70o1ejgk5s6gu1oh
+./StoryManager story show ~/your/path/Usb/Stories::ehin6t1j74s34c9m70o1ejgk5s6gu1oh
 ```
 
 *** Merge stories ***
@@ -228,6 +229,21 @@ Enter 'l' to accept the left value, 'r' to accept the right value
 l
 Applied 1 changes...ed783dvklqs4cn8mstmjcge45qm8oatl
 New ID : ehin6t1o6os34dhi6gr1ejgk5s6gu1oh
+```
+
+*** Sync stories ***
+You create a story, this one will be update by an other people and he modify it. You want to synchronise your modifications with his modifications
+```
+./StoryManager story sync ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/your/path/Usb/Stories
+Done - Synced 0 B in 0s (0 B/s)
+
+Conflict at: .Effort
+Left:  5
+Right: 4
+
+Enter 'l' to accept the left value, 'r' to accept the right value
+l
+Applied 1 changes...ed783dvklqs4cn8mstmjcge45qm8oatl
 ```
 
 *** Close story ***
