@@ -107,10 +107,10 @@ Merge two stories that have common references (command copy duplicate for exempl
 ______________________________
 ```
 story copy <ID> <value>
-story copy <ID> <value> [-d]
+story copy <ID> [-d]
 ```
 
-Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories
+Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./home/your/path/Stories
 ______________________________
 ```
 story sync <ID> <value>
@@ -203,6 +203,31 @@ Done - Synced 0 B in 0s (0 B/s)
 If you want to check, whith the command : 
 ```
 ./StoryManager story show ~/home/your/path/Usb/Stories::ehin6t1j74s34c9m70o1ejgk5s6gu1oh
+```
+
+*** Merge stories ***
+Create a copy, edit, merge it
+```
+./StoryManager story copy ehin6t1j74s34c9m70o1ejgk5s6gu1oh -d
+
+All chunks already exist at destination! Created new dataset Stories.
+Duplicate ID is : ehin6t1g70pjedpi68pka5017olje61o
+
+./StoryManager story edit ehin6t1j74s34c9m70o1ejgk5s6gu1oh -e 4
+./StoryManager story copy ehin6t1g70pjedpi68pka5017olje61o -e 5
+
+./StoryManager story merge ehin6t1j74s34c9m70o1ejgk5s6gu1oh ehin6t1g70pjedpi68pka5017olje61o
+
+Done - Synced 0 B in 0s (0 B/s)
+
+Conflict at: .Effort
+Left:  5
+Right: 4
+
+Enter 'l' to accept the left value, 'r' to accept the right value
+l
+Applied 1 changes...ed783dvklqs4cn8mstmjcge45qm8oatl
+New ID : ehin6t1o6os34dhi6gr1ejgk5s6gu1oh
 ```
 
 *** Close story ***
