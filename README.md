@@ -103,7 +103,7 @@ ______________________________
 story merge <ID1> <ID2>
 ```
 
-Merge two stories that have common references. You need to resolve conflicts if th CLI ask you to choose. This command create a new ID for the merged story and the two lastes stories will be replaced by it
+Merge two stories that have common references (command copy duplicate for exemple). You need to resolve conflicts if th CLI ask you to choose. This command create a new ID for the merged story and the two lastes stories will be replaced by it
 ______________________________
 ```
 story copy <ID> <value>
@@ -190,10 +190,21 @@ ID : ehin6t1j74s34c9m70o1ejgk5s6gu1oh
 struct Task {
   Goal: "newGoal",
   ID: 0,
-  Maker: "Alexis Bredel --> PO",
+  Maker: "Author config --> PO",
   State: "Complete",
 }
 ```
+*** Copy story ***
+```
+./StoryManager story copy ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/home/your/path/Usb/Stories 
+
+Done - Synced 0 B in 0s (0 B/s)
+```
+If you want to check, whith the command : 
+```
+./StoryManager story show ~/home/your/path/Usb/Stories::ehin6t1j74s34c9m70o1ejgk5s6gu1oh
+```
+
 *** Close story ***
 ```
 ./StoryManager story close ehin6t1j74s34c9m70o1ejgk5s6gu1oh         // Exec cmd cmd ID

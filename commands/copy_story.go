@@ -25,7 +25,7 @@ func runCopyStory(cmd *cobra.Command, args []string) error {
 		data := []byte(title[:4] + datetime.Now().String()[20:28] + randomString(10))
 		newID := hash.New(data[:20]).String()
 		util.SyncStory(ID, newID, "Stories", cfg, true)
-		fmt.Println("Duplicate ID is : " + ID)
+		fmt.Println("Duplicate ID is : " + newID)
 	} else {
 		dest := args[1]
 		util.SyncStory(ID, ID, dest, cfg, true)
