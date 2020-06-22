@@ -27,60 +27,67 @@ To run tests, use Robot Framework and run tests.robot
 Commands :
 ______________________________
 list
+list [-c -o]
+list [-d] <value>
+list [-c -o -d] <value>
 
-List ID and title of stories in my db, you can use an other db with flag -d <dbTarget>. Also, you can filtre closed and opened stories
+List ID and title of stories in my db, you can use an other db with flag -d <dbTarget>. Also, you can filter closed and opened stories whith flags -c for "close" and -o "open"
 ______________________________
 user
 
 Show current user in .dbconfig
 ______________________________
-update
+update <dbTarget>
 
 Add stories that are not present in my BDD. The imported stories provide of the dbTarget
 ______________________________
-log
+log <ID>
 
-Show all of the historic about commits in a story
+Show all of the historic about commits in a story ID
 ______________________________
-story create
+story create <title>
 
-Create a new story with random ID
+Create a new story with random ID and title 
 ______________________________
-story edit
+story edit <ID> [-t -d -e] <value>
 
-Change a field value in a story except "Tasks" and "State"
+Change a field value in the story ID except "Tasks" and "State". You can midify title with -t or description with -d or effort with -e
 ______________________________
-story show
+story show <ID>
+story show <ID> [-t]
 
-Show the last state (commit) of a story
+Show the last state (commit) of the story ID. You can just show the tasks with -t
 ______________________________
-story close
+story close <ID>
 
-Change the state of a story with value "Close"
+Change the state of the story ID with value "Close". You can't modify the story after close and it's not possible to reopen it. It is always possible to show/search-task/copy the story
 ______________________________
-story Tadd
+story Tadd <ID> <goal>
+story Tadd <ID> <goal> <maker>
 
-Add a task in the list "Tasks" of a story
+Add a task in the list "Tasks" of a story ID with goal and maker. If you don't give a maker, it will be the current maker in .dbconfig
 ______________________________
-story Tedit
+story Tedit <ID> <IDtask> [-g -m -s] <value>
 
-Edit a task in the list "Tasks" of a story
+Edit a task IDtask in the list "Tasks" of a story ID. You can modify the goal with -g, the maker with -m, the state with -s
 ______________________________
-story Tsearch
+story Tsearch <ID> [-s -m] <value>
 
-Found tasks by value of "State" or "Maker" in the list "Tasks" of a story
+Found tasks by value of "State" with -s or "Maker" with -m in the list "Tasks" of a story ID
 ______________________________
-story merge
+story merge <ID1> <ID2>
 
-Merge two stories that have common references
+Merge two stories that have common references. You need to resolve conflicts if th CLI ask you to choose. This command create a new ID for the merged story and the two lastes stories will be replaced by it
 ______________________________
-story copy
+story copy <ID> <value>
+story copy <ID> <value> [-d]
 
-Copy a story in an other database or add duplicate (other ID) in my database with option -d
+Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories
 ______________________________
-story sync
+story sync <ID> <value>
 
-
+Synchronize two databases (same ID) about the story ID. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories
+______________________________
 
 __________________________________________________________________________
 
@@ -164,4 +171,4 @@ struct Task {
 test closed
 ID : ehin6t1j74s34c9m70o1ejgk5s6gu1oh
 
-!!! You can't modify the story after close and it's not possible to reopen it
+!!! Remember, you can't modify the story after close and it's not possible to reopen it
