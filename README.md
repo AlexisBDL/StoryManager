@@ -3,7 +3,7 @@
 Make and manage decentralized stories
 It use Noms (https://github.com/attic-labs/noms) to manage databases
 
-'''
+```
 Model of datas :
     struct Story {
       Title string        // init title command
@@ -15,7 +15,7 @@ Model of datas :
             Maker string    // init current user
             State string    // init ""
     }
-'''
+```
 
 The goal of this programme is to syncronize databases of stories in local machine.
 
