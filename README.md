@@ -217,7 +217,7 @@ Duplicate ID is : ehin6t1g70pjedpi68pka5017olje61o
 ./StoryManager story edit ehin6t1j74s34c9m70o1ejgk5s6gu1oh -e 4
 ./StoryManager story copy ehin6t1g70pjedpi68pka5017olje61o -e 5
 
-./StoryManager story merge ehin6t1j74s34c9m70o1ejgk5s6gu1oh ehin6t1g70pjedpi68pka5017olje61o
+./StoryManager story merge ehin6t1j74s34c9m70o1ejgk5s6gu1oh ehin6t1g70pjedpi68pka5017olje61o -c
 
 Done - Synced 0 B in 0s (0 B/s)
 
@@ -234,7 +234,7 @@ New ID : ehin6t1o6os34dhi6gr1ejgk5s6gu1oh
 *** Sync stories ***
 You create a story, this one will be update by an other people and he modify it. You want to synchronise your modifications with his modifications
 ```
-./StoryManager story sync ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/your/path/Usb/Stories
+./StoryManager story sync ehin6t1j74s34c9m70o1ejgk5s6gu1oh ~/your/path/Usb/Stories -c
 Done - Synced 0 B in 0s (0 B/s)
 
 Conflict at: .Effort
