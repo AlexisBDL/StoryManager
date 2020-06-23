@@ -17,7 +17,10 @@ import (
 )
 
 var (
-	datasetRe = regexp.MustCompile("^" + datas.DatasetRe.String() + "$")
+	datasetRe   = regexp.MustCompile("^" + datas.DatasetRe.String() + "$")
+	choose      bool
+	leftChoice  bool
+	rightChoice bool
 )
 
 // Fusion de branch aillant le même parent
@@ -54,9 +57,14 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 	// merge
 	tempDB, err := cfg.GetDatabase("temp")
 	d.CheckError(err)
-	defer tempDB.Close()
 
-	util.MergeStory(tempDB, "source", "dest", "merge", user)
+	if choose {
+		util.MergeStory(tempDB, "source", "dest", "merge", user, "p")
+	} else if leftChoice {
+		util.MergeStory(tempDB, "source", "dest", "merge", user, "l")
+	} else if rightChoice {
+		util.MergeStory(tempDB, "source", "dest", "merge", user, "r")
+	}
 
 	// sync temp --> merge ==> MyStory --> newID
 	util.SyncStory("temp::merge", newID, "Stories", cfg, false)
@@ -69,6 +77,7 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 	dbU2.Delete(ds2)
 	dbU2.Close()
 
+	tempDB.Close()
 	os.RemoveAll("temp")
 
 	fmt.Printf("New ID : %s\n", newID)
@@ -77,14 +86,23 @@ func runMergeStory(cmd *cobra.Command, args []string) error {
 }
 
 var mergeStoryCmd = &cobra.Command{
-	Use:   "merge <ID1> <ID2>",
-	Short: "Merge two stories that have similar ref.",
+	Use:   "merge <ID1> <ID2> [Flag]",
+	Short: "Merge two stories that have similar ref. Choose the way to resolve conflicts whith flag. ID1 is left, ID2 is right",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runMergeStory,
 }
 
 func init() {
 	storyCmd.AddCommand(mergeStoryCmd)
+
+	mergeStoryCmd.Flags().BoolVarP(&choose, "choose", "c", false, "Ask me to choose between values if a conflict append")
+	mergeStoryCmd.Flags().Lookup("choose").NoOptDefVal = "true"
+
+	mergeStoryCmd.Flags().BoolVarP(&leftChoice, "left", "l", false, "Display open stories")
+	mergeStoryCmd.Flags().Lookup("left").NoOptDefVal = "true"
+
+	mergeStoryCmd.Flags().BoolVarP(&rightChoice, "right", "r", false, "Display open stories")
+	mergeStoryCmd.Flags().Lookup("right").NoOptDefVal = "true"
 }
 
 func resolveDatasets(db datas.Database, leftName, rightName, mergeName string) (leftDS, rightDS, merged datas.Dataset) {

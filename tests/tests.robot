@@ -2,6 +2,7 @@
 Documentation	Tests of StoryManager commands
 Library    OperatingSystem
 Library    String
+Library    Process
 
 *** Test Cases ***
 Create story
@@ -143,15 +144,17 @@ Merge story
         ${idd}=  Get Substring   ${idd}   18
         ${stdout}=      Run     ./StoryManager story edit ${id} -e 4
         ${stdout}=      Run     ./StoryManager story edit ${idd} -e 5
-        ${stdout}=      Run     echo l | ./StoryManager story merge ${id} ${idd}
-        ${idm}=  Get Line	${stdout}	1
-        ${idm}=  Get Substring   ${idm}   5
+        ${stdout}=      Run     ./StoryManager story merge ${id} ${idd} -l
+        ${idm}=  Get Line	${stdout}	5
+        ${idm}=  Get Substring   ${idm}   9
+        ${stdout}=      Run     ./StoryManager list
         Should Contain  ${stdout}       ${idm}   test
         Should Not Contain      ${stdout}       ${id}
         Should Not Contain      ${stdout}       ${idd}
 
-
 Remove db and no more db
-	${files}=	Count Directories In Directory	${CURDIR}
+        ${files}=	Count Directories In Directory	${CURDIR}
 	Should Be Equal As Integers	${files}	1
         Remove Directory        ${CURDIR}/Stories       recursive=True
+
+        

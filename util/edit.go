@@ -148,11 +148,11 @@ func Commit(db datas.Database, ds datas.Dataset, valPath types.Value, ID, msgCom
 	fmt.Println(msgCli)
 }
 
-func MergeStory(db datas.Database, ds1, ds2, merge, user string) {
+func MergeStory(db datas.Database, ds1, ds2, merge, user, choice string) {
 
 	leftDS, rightDS, mergeDS := resolveDatasets(db, ds1, ds2, merge)
 	left, right, ancestor := getMergeCandidates(db, db, leftDS, rightDS)
-	policy := decidePolicy("p")
+	policy := decidePolicy(choice)
 	pc := newMergeProgressChan()
 	merged, err := policy(left, right, ancestor, db, pc)
 	d.CheckErrorNoUsage(err)
