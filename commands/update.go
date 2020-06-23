@@ -24,7 +24,6 @@ func runUpdateStory(cmd *cobra.Command, args []string) error {
 	var (
 		lsT []string
 		lsL []string
-		lsU []string
 		ID  string
 	)
 
@@ -40,14 +39,18 @@ func runUpdateStory(cmd *cobra.Command, args []string) error {
 
 	for _, v := range lsT {
 		if !Find(lsL, v) {
-			lsU = append(lsU, v)
+			util.SyncStory(dbTarget+"::"+v, v, "Stories", cfg, false)
+			title := getTitle(v)
+			fmt.Printf("Story %s %s imported in my database", v, title)
 		}
 	}
 
-	for _, v := range lsU {
-		util.SyncStory(dbTarget+"::"+v, v, "Stories", cfg, false)
-		title := getTitle(v)
-		fmt.Printf("Story %s %s imported", v, title)
+	for _, v := range lsL {
+		if !Find(lsT, v) {
+			util.SyncStory(v, v, dbTarget, cfg, false)
+			title := getTitle(v)
+			fmt.Printf("Story %s %s imported in target database", v, title)
+		}
 	}
 
 	return nil
