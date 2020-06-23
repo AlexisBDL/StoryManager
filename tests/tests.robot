@@ -121,7 +121,7 @@ List story
         Should Contain  ${stdout}       ${id2}  test
         Should Contain  ${stdout}       ${id3}  test
 
-Copy story
+Copy story duplicate
         ${stdout}=      Run     ./StoryManager story create test
         ${id}=  Get Line	${stdout}	1
         ${id}=  Get Substring   ${id}   5
@@ -157,4 +157,27 @@ Remove db and no more db
 	Should Be Equal As Integers	${files}	1
         Remove Directory        ${CURDIR}/Stories       recursive=True
 
-        
+SyncTest story
+        Create Directory        Local
+        Create Directory        Usb
+        Copy File       .dbconfig       Local
+        Copy File       StoryManager    Local
+        Copy File       .dbconfig       Usb
+        Copy File       StoryManager    Usb
+        ${resultL}=     Run Process     StoryManager  story     create  test    cwd=${CURDIR}/Local  env:PATH=${CURDIR}/Local
+        ${id}=  Get Line	${resultL.stdout}	1
+        ${id}=  Get Substring   ${id}   5
+        ${resultL}=     Run Process     StoryManager  story     copy    ${id}  ../Usb/Stories   cwd=${CURDIR}/Local     env:PATH=${CURDIR}/Local
+        ${resultL}=     Run Process     StoryManager  story     edit    ${id}  -e      1       cwd=${CURDIR}/Local     env:PATH=${CURDIR}/Local
+        ${resultU}=     Run Process     StoryManager  story     edit    ${id}  -e      2       cwd=${CURDIR}/Usb     env:PATH=${CURDIR}/Usb
+        ${resultL}=     Run Process     StoryManager  story     sync    ${id}  ../Usb/Stories   -l      cwd=${CURDIR}/Local     env:PATH=${CURDIR}/Local
+        ${resultL}=     Run Process     StoryManager  story     show    ${id}   cwd=${CURDIR}/Local     env:PATH=${CURDIR}/Local
+        Should Contain  ${resultL.stdout}       Effort: 1
+        ${resultU}=     Run Process     StoryManager  story     show    ${id}   cwd=${CURDIR}/Usb       env:PATH=${CURDIR}/Usb
+        Should Contain  ${resultU.stdout}       Effort: 1
+
+Remove db sync
+        ${files}=	Count Directories In Directory	${CURDIR}
+	Should Be Equal As Integers	${files}	2
+        Remove Directory        ${CURDIR}/Local      recursive=True
+        Remove Directory        ${CURDIR}/Usb   recursive=True
