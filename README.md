@@ -88,6 +88,12 @@ story Tadd <ID> <goal> <maker>
 Add a task in the list "Tasks" of a story ID with goal and maker. If you don't give a maker, it will be the current maker in .dbconfig
 ______________________________
 ```
+story Tdel <ID> <lastIDtask>
+```
+
+Delete a task in the list "Tasks" of a story ID. This command can now delete only the last task
+______________________________
+```
 story Tedit <ID> <IDtask> [-g -m -s] <value>
 ```
 
