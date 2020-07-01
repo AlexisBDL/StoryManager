@@ -24,7 +24,7 @@ func TestCreateCommitMetaStructBasic(t *testing.T) {
 	meta, err := CreateCommitMetaStruct(nil, "", "", "", nil, nil)
 	assert.NoError(err)
 	assert.False(isEmptyStruct(meta))
-	assert.Equal("Struct Meta {\n  date: String,\n}", types.TypeOf(meta).Describe())
+	assert.Equal("Struct Meta {\n  author: String,\n  date: String,\n}", types.TypeOf(meta).Describe())
 }
 
 func TestCreateCommitMetaStructFromFlags(t *testing.T) {
@@ -35,7 +35,7 @@ func TestCreateCommitMetaStructFromFlags(t *testing.T) {
 
 	meta, err := CreateCommitMetaStruct(nil, "", "", "", nil, nil)
 	assert.NoError(err)
-	assert.Equal("Struct Meta {\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  message: String,\n}",
+	assert.Equal("Struct Meta {\n  author: String,\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  message: String,\n}",
 		types.TypeOf(meta).Describe())
 	assert.Equal(types.String(commitMetaDate), meta.Get("date"))
 	assert.Equal(types.String(commitMetaMessage), meta.Get("message"))
@@ -52,7 +52,7 @@ func TestCreateCommitMetaStructFromArgs(t *testing.T) {
 	keyValueArg := map[string]string{"k1": "v1", "k2": "v2", "k3": "v3"}
 	meta, err := CreateCommitMetaStruct(nil, dateArg, messageArg, "", keyValueArg, nil)
 	assert.NoError(err)
-	assert.Equal("Struct Meta {\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  message: String,\n}",
+	assert.Equal("Struct Meta {\n  author: String,\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  message: String,\n}",
 		types.TypeOf(meta).Describe())
 	assert.Equal(types.String(dateArg), meta.Get("date"))
 	assert.Equal(types.String(messageArg), meta.Get("message"))
@@ -74,7 +74,7 @@ func TestCreateCommitMetaStructFromFlagsAndArgs(t *testing.T) {
 	// args passed in should win over the ones in the flags
 	meta, err := CreateCommitMetaStruct(nil, dateArg, messageArg, "", keyValueArg, nil)
 	assert.NoError(err)
-	assert.Equal("Struct Meta {\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  k4: String,\n  message: String,\n}",
+	assert.Equal("Struct Meta {\n  author: String,\n  date: String,\n  k1: String,\n  k2: String,\n  k3: String,\n  k4: String,\n  message: String,\n}",
 		types.TypeOf(meta).Describe())
 	assert.Equal(types.String(dateArg), meta.Get("date"))
 	assert.Equal(types.String(messageArg), meta.Get("message"))
