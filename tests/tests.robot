@@ -181,3 +181,16 @@ Remove db sync
 	Should Be Equal As Integers	${files}	2
         Remove Directory        ${CURDIR}/Local      recursive=True
         Remove Directory        ${CURDIR}/Usb   recursive=True
+
+Random
+        FOR     ${INDEX}        IN RANGE        1       100
+        ${stdout}=	Run	./StoryManager story create test
+        Should Contain  ${stdout}       Story test created
+        END
+        ${stdout}=      Run     ./StoryManager list
+        ${nbL}  Get Line Count  ${stdout}
+
+Remove db random
+        ${files}=	Count Directories In Directory	${CURDIR}
+	Should Be Equal As Integers	${files}	1
+        Remove Directory        ${CURDIR}/Stories       recursive=True
