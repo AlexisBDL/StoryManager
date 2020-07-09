@@ -15,6 +15,9 @@ const (
 	storyTasks  = ".value.Tasks"
 	stateOpen   = "Open"
 	stateClose  = "Close"
+	stateEc     = "Encours"
+	stateTt     = "Test"
+	stateTr     = "Terminé"
 	commitStory = ".value"
 )
 

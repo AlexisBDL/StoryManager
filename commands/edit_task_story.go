@@ -48,8 +48,18 @@ func runEditTaskStory(cmd *cobra.Command, args []string) error {
 		fields = append(fields, "Maker", editMaker)
 	}
 	if editState != "" {
+		switch editState {
+		case "tr":
+			fields = append(fields, "State", stateTr)
+		case "tt":
+			fields = append(fields, "State", stateTt)
+		case "ec":
+			fields = append(fields, "State", stateEc)
+		default:
+			fmt.Printf("Your state it's not recognize, choose ec or tt or tr")
+			return nil
+		}
 		change += "state "
-		fields = append(fields, "State", editState)
 	}
 
 	var (
@@ -83,6 +93,7 @@ func runEditTaskStory(cmd *cobra.Command, args []string) error {
 var editTaskStoryCmd = &cobra.Command{
 	Use:   "Tedit <ID> <IDTask> [flag] <value>",
 	Short: "Edit a task IDTask in story ID.",
+	Long:  "To change state, use flag -s and choose your state : ec -> Encours, tt -> Test, tr -> Terminé",
 	Args:  cobra.ExactArgs(2),
 	RunE:  runEditTaskStory,
 }

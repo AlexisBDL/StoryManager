@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/AlexisBDL/StoryManager/util"
 
 	"github.com/spf13/cobra"
@@ -24,7 +26,17 @@ func runSearchTaskStory(cmd *cobra.Command, args []string) error {
 		util.ListGetBy(resolvedList, "Maker", makerTask)
 	}
 	if stateTask != "" {
-		util.ListGetBy(resolvedList, "State", stateTask)
+		switch stateTask {
+		case "tr":
+			util.ListGetBy(resolvedList, "State", stateTr)
+		case "tt":
+			util.ListGetBy(resolvedList, "State", stateTt)
+		case "ec":
+			util.ListGetBy(resolvedList, "State", stateEc)
+		default:
+			fmt.Printf("Your state it's not recognize, choose ec or tt or tr")
+			return nil
+		}
 	}
 
 	return nil
@@ -33,6 +45,7 @@ func runSearchTaskStory(cmd *cobra.Command, args []string) error {
 var searchTaskStoryCmd = &cobra.Command{
 	Use:   "Tsearch <ID> [flag] <value>",
 	Short: "Search task by value in story ID.",
+	Long:  "For state, use flag -s and choose your state : ec -> Encours, tt -> Test, tr -> Terminé",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runSearchTaskStory,
 }

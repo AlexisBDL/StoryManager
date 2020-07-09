@@ -83,27 +83,55 @@ Edit task
         ${id}=  Get Line	${stdout}	1
         ${id}=  Get Substring   ${id}   5
 	${stdout}=	Run	./StoryManager story Tadd ${id} task
-        ${stdout}=	Run	./StoryManager story Tedit ${id} 0 -s Complete
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 0 -g newGoal
+        Should Contain  ${stdout}       Task 0 edited in story test
+        Should Contain  ${stdout}       ID : ${id}
+        ${stdout}=      Run     ./StoryManager story show ${id} -t
+        Should Contain  ${stdout}       Goal: "newGoal",
+        Should Contain  ${stdout}       ID: 0,
+        Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
+        Should Contain  ${stdout}       State: "",
+
+Edit task state
+        ${stdout}=      Run     ./StoryManager story create test
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+	${stdout}=	Run	./StoryManager story Tadd ${id} task
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 0 -s ec
         Should Contain  ${stdout}       Task 0 edited in story test
         Should Contain  ${stdout}       ID : ${id}
         ${stdout}=      Run     ./StoryManager story show ${id} -t
         Should Contain  ${stdout}       Goal: "task",
         Should Contain  ${stdout}       ID: 0,
         Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
-        Should Contain  ${stdout}       State: "Complete",
-
+        Should Contain  ${stdout}       State: "Encours",
+        
 Search task
         ${stdout}=      Run     ./StoryManager story create test
         ${id}=  Get Line	${stdout}	1
         ${id}=  Get Substring   ${id}   5
 	${stdout}=	Run	./StoryManager story Tadd ${id} task
         ${stdout}=	Run	./StoryManager story Tadd ${id} task2
-        ${stdout}=	Run	./StoryManager story Tedit ${id} 1 -s Complete
-        ${stdout}=	Run	./StoryManager story Tsearch ${id} -s Complete
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 1 -m newMaker
+        ${stdout}=	Run	./StoryManager story Tsearch ${id} -m newMaker
+        Should Contain  ${stdout}       Goal: "task2",
+        Should Contain  ${stdout}       ID: 1,
+        Should Contain  ${stdout}       Maker: "newMaker",
+        Should Contain  ${stdout}       State: "",
+        Should Not Contain       ${stdout}       ID: 0,
+
+Search task by state
+        ${stdout}=      Run     ./StoryManager story create test
+        ${id}=  Get Line	${stdout}	1
+        ${id}=  Get Substring   ${id}   5
+	${stdout}=	Run	./StoryManager story Tadd ${id} task
+        ${stdout}=	Run	./StoryManager story Tadd ${id} task2
+        ${stdout}=	Run	./StoryManager story Tedit ${id} 1 -s tr
+        ${stdout}=	Run	./StoryManager story Tsearch ${id} -s tr
         Should Contain  ${stdout}       Goal: "task2",
         Should Contain  ${stdout}       ID: 1,
         Should Contain  ${stdout}       Maker: "Alexis Bredel --> PO",
-        Should Contain  ${stdout}       State: "Complete",
+        Should Contain  ${stdout}       State: "Terminé",
         Should Not Contain       ${stdout}       ID: 0,
 
 List story
