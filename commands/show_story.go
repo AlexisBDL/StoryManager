@@ -39,6 +39,7 @@ func runShowStory(cmd *cobra.Command, args []string) error {
 var showStoryCmd = &cobra.Command{
 	Use:   "show <ID>",
 	Short: "Show the story ID.",
+	Long:  "Show log whit '#commitID",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runShowStory,
 }

@@ -221,7 +221,7 @@ All chunks already exist at destination! Created new dataset Stories.
 Duplicate ID is : ehin6t1g70pjedpi68pka5017olje61o
 
 ./StoryManager story edit ehin6t1j74s34c9m70o1ejgk5s6gu1oh -e 4
-./StoryManager story copy ehin6t1g70pjedpi68pka5017olje61o -e 5
+./StoryManager story edit ehin6t1g70pjedpi68pka5017olje61o -e 5
 
 ./StoryManager story merge ehin6t1j74s34c9m70o1ejgk5s6gu1oh ehin6t1g70pjedpi68pka5017olje61o -c
 
