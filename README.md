@@ -1,6 +1,6 @@
 # StoryManager
 
-Make and manage decentralized stories
+Make and manage decentralized stories.
 It use Noms (https://github.com/attic-labs/noms) to manage databases
 
 ```
