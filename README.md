@@ -35,7 +35,7 @@ list [-d] <value>
 list [-c -o -d] <value>
 ```
 
-List ID and title of stories in my db, you can use an other db with flag -d <dbTarget>. Also, you can filter closed and opened stories whith flags -c for "close" and -o "open"
+List ID and title of stories in my db, you can use another db with flag -d <dbTarget>. Also, you can filter closed and opened stories with flags -c for "close" and -o "open"
 ______________________________
 ```
 user
