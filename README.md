@@ -6,7 +6,7 @@ It use Noms (https://github.com/attic-labs/noms) to manage databases
 ```
 Model of datas :
     struct Story {
-      Title string        // init title command
+      	    Title string        // init title command
 	    Description string  // init ""
 	    Effort int          // init 0
 	    State string        // Open or Close
@@ -65,7 +65,7 @@ ______________________________
 story edit <ID> [-t -d -e] <value>
 ```
 
-Change a field value in the story ID except "Tasks" and "State". You can midify title with -t or description with -d or effort with -e
+Change a field value in the story ID except "Tasks" and "State". You can modify title with -t or description with -d or effort with -e
 ______________________________
 ```
 story show <ID>
