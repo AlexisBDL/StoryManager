@@ -13,7 +13,7 @@ Model of datas :
         Tasks               // list of tasks
             Goal  string    // init goal command
             Maker string    // init current user
-            State string    // init ""
+            State string    // init "", value (change Encouts, Test, Termine)
 	    ID int	    // place of task in Tasks[]
     }
 ```
