@@ -14,6 +14,7 @@ Model of datas :
             Goal  string    // init goal command
             Maker string    // init current user
             State string    // init ""
+	    ID int	    // place of task in Tasks[]
     }
 ```
 
@@ -109,14 +110,14 @@ ______________________________
 story merge <ID1> <ID2> [-c -l -r]
 ```
 
-Merge two stories that have common references (command copy duplicate for exemple). You need to resolve conflicts in CLI if you use option -c. Or force update with left -l or right -r. This command create a new ID for the merged story and the two lastes stories will be replaced by it
+Merge two stories that have common references (command copy duplicate for exemple). You need to resolve conflicts in CLI if you use option -c. Or force update with left -l or right -r. This command create a new ID for the merged story and the two lastest stories will be replaced by it
 ______________________________
 ```
 story copy <ID> <value>
 story copy <ID> [-d]
 ```
 
-Copy a story in an other database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./your/path/Stories
+Copy a story in another database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./your/path/Stories
 ______________________________
 ```
 story sync <ID> <value>
