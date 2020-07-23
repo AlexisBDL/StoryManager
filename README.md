@@ -106,10 +106,10 @@ story Tsearch <ID> [-s -m] <value>
 Found tasks by value of "State" with -s or "Maker" with -m in the list "Tasks" of a story ID
 ______________________________
 ```
-story merge <ID1> <ID2>
+story merge <ID1> <ID2> [-c -l -r]
 ```
 
-Merge two stories that have common references (command copy duplicate for exemple). You need to resolve conflicts if th CLI ask you to choose. This command create a new ID for the merged story and the two lastes stories will be replaced by it
+Merge two stories that have common references (command copy duplicate for exemple). You need to resolve conflicts in CLI if you use option -c. Or force update with left -l or right -r. This command create a new ID for the merged story and the two lastes stories will be replaced by it
 ______________________________
 ```
 story copy <ID> <value>
