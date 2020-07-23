@@ -98,10 +98,10 @@ func init() {
 	mergeStoryCmd.Flags().BoolVarP(&choose, "choose", "c", false, "Ask me to choose between values if a conflict append")
 	mergeStoryCmd.Flags().Lookup("choose").NoOptDefVal = "true"
 
-	mergeStoryCmd.Flags().BoolVarP(&leftChoice, "left", "l", false, "Display open stories")
+	mergeStoryCmd.Flags().BoolVarP(&leftChoice, "left", "l", false, "Force update if conflict with value in left")
 	mergeStoryCmd.Flags().Lookup("left").NoOptDefVal = "true"
 
-	mergeStoryCmd.Flags().BoolVarP(&rightChoice, "right", "r", false, "Display open stories")
+	mergeStoryCmd.Flags().BoolVarP(&rightChoice, "right", "r", false, "Force update if conflict with value in right")
 	mergeStoryCmd.Flags().Lookup("right").NoOptDefVal = "true"
 }
 
