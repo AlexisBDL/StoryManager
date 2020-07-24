@@ -120,11 +120,12 @@ story copy <ID> [-d]
 Copy a story in another database or add duplicate (other ID) in my database with option -d. Value is the path of the database. Don't forget the name of the database in the path : ./your/path/Stories
 ______________________________
 ```
-story sync <ID> <value>
+story sync <ID> <value> [-c -l -r]
 ```
 
-Synchronize two databases (same ID) about the story ID. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories
-The CLI ask you for conflict and finaly you and the database at value have the same story ID
+Synchronize two databases (same ID) about the story ID. Value is the path of the database. Don't forget the name of the database in the path : ./home/user/Documents/Stories.
+Option c ask you to choice between two conflicts, l force left choice, r force right choice
+
 ______________________________
 
 __________________________________________________________________________
